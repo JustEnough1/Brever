@@ -16,6 +16,10 @@
   "author": "Roman Ivanov",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }
