@@ -12,15 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 const DatabaseManager_1 = require("../database/DatabaseManager");
 class UserModel {
-    constructor(firstname, lastname, username, password) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.username = username;
-        this.password = password;
-    }
-    save() {
+    static save(username, password, firstname, lastname) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield DatabaseManager_1.DatabaseManager.executeQuery(`INSERT INTO users VALUES (DEFAULT, "${this.username}", "${this.password}", "${this.firstname}", "${this.lastname}", DEFAULT, DEFAULT, DEFAULT)`);
+            return yield DatabaseManager_1.DatabaseManager.executeQuery(`INSERT INTO users VALUES (DEFAULT, "${username}", "${password}", "${firstname}", "${lastname}", DEFAULT, DEFAULT, DEFAULT)`);
+        });
+    }
+    static findUser(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT * FROM users WHERE username = "${username}"`);
+            return user[0];
         });
     }
 }

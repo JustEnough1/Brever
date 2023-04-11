@@ -15,20 +15,39 @@ authRouter.post(
         try {
             const { firstname, lastname, username, password } = req.body;
 
-            const newUser = new UserModel(
-                firstname,
-                lastname,
-                username,
-                password
+            await UserModel.save(username, password, firstname, lastname).catch(
+                (error) => {
+                    throw error;
+                }
             );
-
-            await newUser.save().catch((error) => {
-                throw error;
-            });
 
             res.send({ message: "New account created." });
         } catch (error) {
-            res.send({ message: "Cannot create new account. Try later." });
+            res.send({
+                message: "Cannot create new account. Try again later.",
+            });
+        }
+    }
+);
+
+authRouter.post(
+    "/login",
+    validateUsername,
+    validatePassword,
+    async (req, res) => {
+        try {
+            const { username, password } = req.body;
+
+            const user = await UserModel.findUser(username);
+
+            if (user === undefined || !(password === user.password))
+                return res.status(400).json({
+                    message: "Wrong username or password.",
+                });
+
+            res.json({ message: "Logged successfully." });
+        } catch (error) {
+            res.json({ message: "Cannot log in. Try again later." });
         }
     }
 );
