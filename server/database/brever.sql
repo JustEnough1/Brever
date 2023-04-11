@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:8889
--- Время создания: Мар 31 2023 г., 12:45
+-- Время создания: Апр 11 2023 г., 11:01
 -- Версия сервера: 5.7.34
 -- Версия PHP: 7.4.21
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- База данных: `brever`
 --
+CREATE DATABASE IF NOT EXISTS `brever` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `brever`;
 
 -- --------------------------------------------------------
 
@@ -33,7 +35,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT 'default.jpg',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -46,7 +48,8 @@ CREATE TABLE `users` (
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -56,7 +59,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
