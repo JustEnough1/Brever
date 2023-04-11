@@ -12,11 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouter = void 0;
 const express_1 = require("express");
 const User_1 = require("../models/User");
+const validateUsername_1 = require("../middlewares/validateUsername");
+const validatePassword_1 = require("../middlewares/validatePassword");
+const validateName_1 = require("../middlewares/validateName");
 exports.authRouter = (0, express_1.Router)();
-exports.authRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.post("/signup", validateUsername_1.validateUsername, validatePassword_1.validatePassword, validateName_1.validateName, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstname, lastname, username, password } = req.body;
-        console.table({ firstname, lastname, username, password });
         const newUser = new User_1.UserModel(firstname, lastname, username, password);
         yield newUser.save().catch((error) => {
             throw error;
