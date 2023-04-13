@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouter = void 0;
 const express_1 = require("express");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const User_1 = require("../models/User");
 const validateUsername_1 = require("../middlewares/validateUsername");
 const validatePassword_1 = require("../middlewares/validatePassword");
@@ -19,7 +23,9 @@ exports.authRouter = (0, express_1.Router)();
 exports.authRouter.post("/signup", validateUsername_1.validateUsername, validatePassword_1.validatePassword, validateName_1.validateName, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { firstname, lastname, username, password } = req.body;
-        yield User_1.UserModel.save(username, password, firstname, lastname).catch((error) => {
+        const salt = bcryptjs_1.default.genSaltSync(10);
+        const hashedPassword = bcryptjs_1.default.hashSync(password, salt);
+        yield User_1.UserModel.save(username, hashedPassword, salt, firstname, lastname).catch((error) => {
             throw error;
         });
         res.send({ message: "New account created." });
@@ -33,14 +39,21 @@ exports.authRouter.post("/signup", validateUsername_1.validateUsername, validate
 exports.authRouter.post("/login", validateUsername_1.validateUsername, validatePassword_1.validatePassword, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
-        const user = yield User_1.UserModel.findUser(username);
-        if (user === undefined || !(password === user.password))
+        const user = yield User_1.UserModel.find(username);
+        if (!user) {
+            return res.status(400).json({
+                message: "Wrong username or password.",
+            });
+        }
+        const isMatch = yield bcryptjs_1.default.compare(password, user.password);
+        if (!isMatch)
             return res.status(400).json({
                 message: "Wrong username or password.",
             });
         res.json({ message: "Logged successfully." });
     }
     catch (error) {
+        console.log(error);
         res.json({ message: "Cannot log in. Try again later." });
     }
 }));

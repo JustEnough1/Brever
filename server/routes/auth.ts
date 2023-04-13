@@ -1,4 +1,5 @@
 import { Router } from "express";
+import bcrypt from "bcryptjs";
 import { UserModel } from "../models/User";
 import { validateUsername } from "../middlewares/validateUsername";
 import { validatePassword } from "../middlewares/validatePassword";
@@ -15,11 +16,18 @@ authRouter.post(
         try {
             const { firstname, lastname, username, password } = req.body;
 
-            await UserModel.save(username, password, firstname, lastname).catch(
-                (error) => {
-                    throw error;
-                }
-            );
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(password, salt);
+
+            await UserModel.save(
+                username,
+                hashedPassword,
+                salt,
+                firstname,
+                lastname
+            ).catch((error) => {
+                throw error;
+            });
 
             res.send({ message: "New account created." });
         } catch (error) {
@@ -38,15 +46,25 @@ authRouter.post(
         try {
             const { username, password } = req.body;
 
-            const user = await UserModel.findUser(username);
+            const user = await UserModel.find(username);
 
-            if (user === undefined || !(password === user.password))
+            if (!user) {
+                return res.status(400).json({
+                    message: "Wrong username or password.",
+                });
+            }
+
+            const isMatch = await bcrypt.compare(password, user.password);
+
+            if (!isMatch)
                 return res.status(400).json({
                     message: "Wrong username or password.",
                 });
 
             res.json({ message: "Logged successfully." });
         } catch (error) {
+            console.log(error);
+
             res.json({ message: "Cannot log in. Try again later." });
         }
     }
