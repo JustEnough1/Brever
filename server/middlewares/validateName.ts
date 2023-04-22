@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 
-export function validateName(req: Request, res: Response, next: NextFunction) {
+export function validateNameMiddleware(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
     const { firstname, lastname } = req.body;
 
     if (!(firstname.length > 0 && firstname.length < 255))

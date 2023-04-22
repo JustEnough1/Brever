@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validatePassword = void 0;
-function validatePassword(req, res, next) {
+exports.validatePasswordMiddleware = void 0;
+function validatePasswordMiddleware(req, res, next) {
     const { password } = req.body;
     const passwordRegEx = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{1,255}$/;
     if (!passwordRegEx.test(password))
@@ -10,4 +10,4 @@ function validatePassword(req, res, next) {
         });
     next();
 }
-exports.validatePassword = validatePassword;
+exports.validatePasswordMiddleware = validatePasswordMiddleware;

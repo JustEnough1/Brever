@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-export function validatePassword(
+export function validatePasswordMiddleware(
     req: Request,
     res: Response,
     next: NextFunction

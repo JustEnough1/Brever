@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateUsername = void 0;
-function validateUsername(req, res, next) {
+exports.validateUsernameMiddleware = void 0;
+function validateUsernameMiddleware(req, res, next) {
     const { username } = req.body;
     if (!(username.length > 0 && username.length < 50))
         return res.status(400).json({
@@ -9,4 +9,4 @@ function validateUsername(req, res, next) {
         });
     next();
 }
-exports.validateUsername = validateUsername;
+exports.validateUsernameMiddleware = validateUsernameMiddleware;
