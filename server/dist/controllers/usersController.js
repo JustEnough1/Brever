@@ -12,18 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = void 0;
 const User_1 = require("../models/User");
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const session = req.session;
-    const { username, password, first_name, last_name, avatar } = req.body;
-    yield User_1.UserModel.update(session.userId, {
-        username,
-        password,
-        first_name,
-        last_name,
-        avatar,
-    }).catch((err) => {
+    try {
+        const session = req.session;
+        const { username, password, first_name, last_name, avatar } = req.body;
+        yield User_1.UserModel.update(session.userId, {
+            username,
+            password,
+            first_name,
+            last_name,
+            avatar,
+        }).catch((err) => {
+            throw err;
+        });
+        const profile = User_1.UserModel.getProfileFromUser(yield User_1.UserModel.findById(session.userId));
+        res.json(profile);
+    }
+    catch (error) {
         return res.status(500).json({ message: "Cannot update user." });
-    });
-    const profile = User_1.UserModel.getProfileFromUser(yield User_1.UserModel.findById(session.userId));
-    res.json(profile);
+    }
 });
 exports.updateUser = updateUser;
