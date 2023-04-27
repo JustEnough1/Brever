@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkSessionMiddleware = void 0;
+exports.checkSocketSessionMiddleware = exports.checkSessionMiddleware = void 0;
 function checkSessionMiddleware(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -25,3 +25,18 @@ function checkSessionMiddleware(req, res, next) {
     });
 }
 exports.checkSessionMiddleware = checkSessionMiddleware;
+function checkSocketSessionMiddleware(socket, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const session = socket.request.session;
+            if (!session.userId) {
+                return socket.emit("error", { message: "Unauthorized" });
+            }
+            next();
+        }
+        catch (error) {
+            return socket.emit("error", { message: "Error" });
+        }
+    });
+}
+exports.checkSocketSessionMiddleware = checkSocketSessionMiddleware;
