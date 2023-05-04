@@ -16,6 +16,10 @@ const getContacts = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
         const contacts = yield Contact_1.ContactsModel.findAll(session.userId);
+        contacts.forEach((contact) => {
+            const contactIds = [session.userId, contact.id].sort();
+            socket.join(`chat-${contactIds[0]}-${contactIds[1]}`);
+        });
         socket.emit("get_contacts", contacts);
     }
     catch (error) {
