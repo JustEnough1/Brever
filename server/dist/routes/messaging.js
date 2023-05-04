@@ -9,34 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const contactsController_1 = require("../controllers/contactsController");
 const checkSession_1 = require("../middlewares/checkSession");
-function setupContactsSocketListeners(io) {
+const messagingController_1 = require("../controllers/messagingController");
+function setupMessagingSocketListeners(io) {
     io.on("connection", (socket) => {
-        socket.on("get_contacts", () => __awaiter(this, void 0, void 0, function* () {
+        socket.on("send_message", ({ receiverId, message }) => __awaiter(this, void 0, void 0, function* () {
             try {
                 yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                    (0, contactsController_1.getContacts)(socket);
-                });
-            }
-            catch (error) {
-                socket.emit("error", { error: "Error" });
-            }
-        }));
-        socket.on("send_friend_request", ({ friendId }) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                    (0, contactsController_1.sendFriendRequest)(socket, friendId);
+                    (0, messagingController_1.sendMessage)(socket, io, receiverId, message);
                 });
             }
             catch (error) {
                 socket.emit("error", { message: "Error" });
             }
         }));
-        socket.on("accept_friend_request", ({ friendId }) => __awaiter(this, void 0, void 0, function* () {
+        socket.on("fetch_messages", ({ friendId, offset }) => __awaiter(this, void 0, void 0, function* () {
             try {
                 yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                    (0, contactsController_1.acceptFriendRequest)(socket, friendId);
+                    (0, messagingController_1.fetchMessages)(socket, friendId, offset);
                 });
             }
             catch (error) {
@@ -45,4 +35,4 @@ function setupContactsSocketListeners(io) {
         }));
     });
 }
-exports.default = setupContactsSocketListeners;
+exports.default = setupMessagingSocketListeners;

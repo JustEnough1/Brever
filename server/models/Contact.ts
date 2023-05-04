@@ -20,9 +20,7 @@ export class ContactsModel {
 
             return await DatabaseManager.executeQuery(query);
         } catch (error) {
-            console.log(error);
-
-            return new Error("Error");
+            return error;
         }
     }
 
@@ -35,5 +33,15 @@ export class ContactsModel {
             WHERE user_id = ${userId} AND status = '${ContactStatus.ACCEPTED}'
             `
         );
+    }
+
+    static async areContacts(userId: number, friendId: number) {
+        const result = await DatabaseManager.executeQuery(
+            `
+            SELECT COUNT(*) as count FROM contacts WHERE (user_id = ${userId} AND friend_id = ${friendId} AND status = '${ContactStatus.ACCEPTED}') 
+            `
+        );
+
+        return result[0].count > 0 ? true : false;
     }
 }

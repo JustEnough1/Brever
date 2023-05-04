@@ -1,12 +1,26 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -14,64 +28,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
+const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
-const auth_1 = require("./routes/auth");
+const auth_1 = __importStar(require("./routes/auth"));
 const users_1 = require("./routes/users");
-const contacts_1 = require("./routes/contacts");
-const checkSession_1 = require("./middlewares/checkSession");
-const contactsController_1 = require("./controllers/contactsController");
+const contacts_1 = __importDefault(require("./routes/contacts"));
+const messaging_1 = __importDefault(require("./routes/messaging"));
 dotenv_1.default.config();
-const PORT = 3000;
+const PORT = 3001;
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
-const io = new socket_io_1.Server(httpServer);
+const io = new socket_io_1.Server(httpServer, {
+    cors: {
+        origin: "http://localhost:3000",
+        credentials: true,
+    },
+});
 const sessionMiddleware = (0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 },
 });
 app.use(express_1.default.json());
+app.use((0, cors_1.default)({
+    origin: "http://localhost:3000",
+    credentials: true,
+}));
 app.use(sessionMiddleware);
 io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
 app.use("/auth", auth_1.authRouter);
 app.use("/users", users_1.usersRouter);
-app.use("/contacts", contacts_1.contactssRouter);
-io.on("connection", (socket) => {
-    socket.on("get_contacts", () => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                (0, contactsController_1.getContacts)(socket);
-            });
-        }
-        catch (error) {
-            socket.emit("error", { message: "Error" });
-        }
-    }));
-    socket.on("send_friend_request", ({ friendId }) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                (0, contactsController_1.sendFriendRequest)(socket, friendId);
-            });
-        }
-        catch (error) {
-            socket.emit("error", { message: "Error" });
-        }
-    }));
-    socket.on("accept_friend_request", ({ friendId }) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                (0, contactsController_1.acceptFriendRequest)(socket, friendId);
-            });
-        }
-        catch (error) {
-            socket.emit("error", { message: "Error" });
-        }
-    }));
-});
+(0, contacts_1.default)(io);
+(0, auth_1.default)(io);
+(0, messaging_1.default)(io);
 httpServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
