@@ -14,7 +14,7 @@ export default function setupContactsSocketListeners(io: Server) {
                     getContacts(socket);
                 });
             } catch (error) {
-                socket.emit("error", { message: "Error" });
+                socket.emit("error", { error: "Error" });
             }
         });
 

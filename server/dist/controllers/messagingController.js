@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendMessage = void 0;
+exports.fetchMessages = exports.sendMessage = void 0;
 const Message_1 = require("../models/Message");
 const sendMessage = (socket, io, receiverId, message) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,3 +24,14 @@ const sendMessage = (socket, io, receiverId, message) => __awaiter(void 0, void 
     }
 });
 exports.sendMessage = sendMessage;
+const fetchMessages = (socket, friendId, offset) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const session = socket.request.session;
+        const messages = yield Message_1.Message.find(session.userId, friendId, offset);
+        socket.emit("fetch_messages", messages);
+    }
+    catch (error) {
+        socket.emit("error", { error: "Error" });
+    }
+});
+exports.fetchMessages = fetchMessages;

@@ -37,6 +37,18 @@ export class UserModel {
         return user[0];
     }
 
+    static async findBySearchValue(searchValue: string, userId: number) {
+        let users = await DatabaseManager.executeQuery(
+            `SELECT * FROM users WHERE username LIKE "%${searchValue}%" AND id != ${userId}`
+        );
+
+        users = users.map((user: IUser) => {
+            return UserModel.getProfileFromUser(user);
+        });
+
+        return users;
+    }
+
     static getProfileFromUser(user: IUser): IProfile {
         return {
             id: user.id,

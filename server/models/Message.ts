@@ -19,4 +19,15 @@ export class Message {
             `SELECT * FROM messages WHERE id = ${result.insertId}`
         );
     }
+
+    static async find(userId: number, friendId: number, offset: number) {
+        const messages: IMessage[] = await DatabaseManager.executeQuery(
+            `SELECT sender_id, receiver_id, message, created_at FROM messages
+           WHERE (sender_id = ${userId} AND receiver_id = ${friendId}) OR (sender_id = ${friendId} AND receiver_id = ${userId})
+           ORDER BY created_at DESC
+           LIMIT 20 OFFSET ${offset}`
+        );
+
+        return messages;
+    }
 }

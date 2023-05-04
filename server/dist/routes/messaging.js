@@ -23,6 +23,16 @@ function setupMessagingSocketListeners(io) {
                 socket.emit("error", { message: "Error" });
             }
         }));
+        socket.on("fetch_messages", ({ friendId, offset }) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
+                    (0, messagingController_1.fetchMessages)(socket, friendId, offset);
+                });
+            }
+            catch (error) {
+                socket.emit("error", { message: "Error" });
+            }
+        }));
     });
 }
 exports.default = setupMessagingSocketListeners;

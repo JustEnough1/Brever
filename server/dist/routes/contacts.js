@@ -20,7 +20,7 @@ function setupContactsSocketListeners(io) {
                 });
             }
             catch (error) {
-                socket.emit("error", { message: "Error" });
+                socket.emit("error", { error: "Error" });
             }
         }));
         socket.on("send_friend_request", ({ friendId }) => __awaiter(this, void 0, void 0, function* () {

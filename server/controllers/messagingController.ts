@@ -23,3 +23,18 @@ export const sendMessage = async (
         socket.emit("error", { message: "Error" });
     }
 };
+
+export const fetchMessages = async (
+    socket: Socket,
+    friendId: number,
+    offset: number
+) => {
+    try {
+        const session = socket.request.session as IUserSession;
+
+        const messages = await Message.find(session.userId, friendId, offset);
+        socket.emit("fetch_messages", messages);
+    } catch (error) {
+        socket.emit("error", { error: "Error" });
+    }
+};

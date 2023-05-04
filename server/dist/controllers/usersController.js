@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = void 0;
+exports.searchUser = exports.updateUser = void 0;
 const User_1 = require("../models/User");
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -32,3 +32,18 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateUser = updateUser;
+const searchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { searchValue } = req.query;
+        if (!searchValue)
+            return res
+                .status(400)
+                .json({ message: "Please, provide search value." });
+        const matchedUsers = yield User_1.UserModel.findBySearchValue(searchValue, req.session.userId);
+        res.json({ matchedUsers });
+    }
+    catch (error) {
+        res.status(500).json({ error: "Error occured." });
+    }
+});
+exports.searchUser = searchUser;

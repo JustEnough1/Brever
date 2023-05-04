@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { checkSocketSessionMiddleware } from "../middlewares/checkSession";
-import { sendMessage } from "../controllers/messagingController";
+import { fetchMessages, sendMessage } from "../controllers/messagingController";
 
 export default function setupMessagingSocketListeners(io: Server) {
     io.on("connection", (socket) => {
@@ -8,6 +8,16 @@ export default function setupMessagingSocketListeners(io: Server) {
             try {
                 await checkSocketSessionMiddleware(socket, () => {
                     sendMessage(socket, io, receiverId, message);
+                });
+            } catch (error) {
+                socket.emit("error", { message: "Error" });
+            }
+        });
+
+        socket.on("fetch_messages", async ({ friendId, offset }) => {
+            try {
+                await checkSocketSessionMiddleware(socket, () => {
+                    fetchMessages(socket, friendId, offset);
                 });
             } catch (error) {
                 socket.emit("error", { message: "Error" });

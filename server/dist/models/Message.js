@@ -22,5 +22,14 @@ class Message {
             return yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT * FROM messages WHERE id = ${result.insertId}`);
         });
     }
+    static find(userId, friendId, offset) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const messages = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT sender_id, receiver_id, message, created_at FROM messages
+           WHERE (sender_id = ${userId} AND receiver_id = ${friendId}) OR (sender_id = ${friendId} AND receiver_id = ${userId})
+           ORDER BY created_at DESC
+           LIMIT 20 OFFSET ${offset}`);
+            return messages;
+        });
+    }
 }
 exports.Message = Message;

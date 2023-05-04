@@ -38,6 +38,15 @@ class UserModel {
             return user[0];
         });
     }
+    static findBySearchValue(searchValue, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT * FROM users WHERE username LIKE "%${searchValue}%" AND id != ${userId}`);
+            users = users.map((user) => {
+                return UserModel.getProfileFromUser(user);
+            });
+            return users;
+        });
+    }
     static getProfileFromUser(user) {
         return {
             id: user.id,
