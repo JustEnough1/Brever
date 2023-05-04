@@ -30,8 +30,7 @@ class ContactsModel {
                 return yield DatabaseManager_1.DatabaseManager.executeQuery(query);
             }
             catch (error) {
-                console.log(error);
-                return new Error("Error");
+                return error;
             }
         });
     }
@@ -43,6 +42,14 @@ class ContactsModel {
             INNER JOIN users ON friend_id = users.id
             WHERE user_id = ${userId} AND status = '${contactStatus_1.ContactStatus.ACCEPTED}'
             `);
+        });
+    }
+    static areContacts(userId, friendId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield DatabaseManager_1.DatabaseManager.executeQuery(`
+            SELECT COUNT(*) as count FROM contacts WHERE (user_id = ${userId} AND friend_id = ${friendId} AND status = '${contactStatus_1.ContactStatus.ACCEPTED}') 
+            `);
+            return result[0].count > 0 ? true : false;
         });
     }
 }

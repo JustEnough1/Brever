@@ -13,10 +13,10 @@ const checkSession_1 = require("../middlewares/checkSession");
 const messagingController_1 = require("../controllers/messagingController");
 function setupMessagingSocketListeners(io) {
     io.on("connection", (socket) => {
-        socket.on("send_message", (receiverId, message) => __awaiter(this, void 0, void 0, function* () {
+        socket.on("send_message", ({ receiverId, message }) => __awaiter(this, void 0, void 0, function* () {
             try {
                 yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                    (0, messagingController_1.sendMessage)(socket, receiverId, message);
+                    (0, messagingController_1.sendMessage)(socket, io, receiverId, message);
                 });
             }
             catch (error) {

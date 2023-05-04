@@ -38,11 +38,10 @@ export class ContactsModel {
     static async areContacts(userId: number, friendId: number) {
         const result = await DatabaseManager.executeQuery(
             `
-            SELECT COUNT(*) as count FROM contacts WHERE (user_id = ${userId} AND friend_id = ${friendId} AND status = ${ContactStatus.ACCEPTED}) 
+            SELECT COUNT(*) as count FROM contacts WHERE (user_id = ${userId} AND friend_id = ${friendId} AND status = '${ContactStatus.ACCEPTED}') 
             `
         );
 
-        console.log(result);
-        return result > 0 ? true : false;
+        return result[0].count > 0 ? true : false;
     }
 }

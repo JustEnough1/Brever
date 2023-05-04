@@ -10,13 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMessage = void 0;
-const sendMessage = (socket, receiverId, message) => __awaiter(void 0, void 0, void 0, function* () {
+const Message_1 = require("../models/Message");
+const sendMessage = (socket, io, receiverId, message) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
-        yield Message.save(session.userId, receiverId, message);
+        const result = yield Message_1.Message.save(session.userId, receiverId, message);
+        const contactIds = [session.userId, receiverId].sort();
+        io.to(`chat-${contactIds[0]}-${contactIds[1]}`).emit("send_message", result);
     }
     catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Error" });
     }
 });
 exports.sendMessage = sendMessage;

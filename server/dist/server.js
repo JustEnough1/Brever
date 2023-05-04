@@ -34,6 +34,7 @@ const socket_io_1 = require("socket.io");
 const auth_1 = __importStar(require("./routes/auth"));
 const users_1 = require("./routes/users");
 const contacts_1 = __importDefault(require("./routes/contacts"));
+const messaging_1 = __importDefault(require("./routes/messaging"));
 dotenv_1.default.config();
 const PORT = 3000;
 const app = (0, express_1.default)();
@@ -53,6 +54,7 @@ app.use("/auth", auth_1.authRouter);
 app.use("/users", users_1.usersRouter);
 (0, contacts_1.default)(io);
 (0, auth_1.default)(io);
+(0, messaging_1.default)(io);
 httpServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

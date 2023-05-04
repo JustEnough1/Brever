@@ -12,6 +12,7 @@ import {
     SocketData,
 } from "./ts/interfaces/ISocketIO";
 import setupContactsSocketListeners from "./routes/contacts";
+import setupMessagingSocketListeners from "./routes/messaging";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use("/users", usersRouter);
 
 setupContactsSocketListeners(io);
 setupAuthSocketListeners(io);
+setupMessagingSocketListeners(io);
 
 httpServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
