@@ -57,6 +57,7 @@ export default function LoginPage() {
                     />
                     <Input
                         placeholder={"Password"}
+                        type="password"
                         changeHandler={handlePasswordChange}
                     />
                 </div>
