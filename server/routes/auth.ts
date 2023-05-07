@@ -6,7 +6,12 @@ import {
     checkSessionMiddleware,
     checkSocketSessionMiddleware,
 } from "../middlewares/checkSession";
-import { login, logout, signup } from "../controllers/authController";
+import {
+    checkSession,
+    login,
+    logout,
+    signup,
+} from "../controllers/authController";
 import { Server, Socket } from "socket.io";
 
 export const authRouter = Router();
@@ -27,5 +32,7 @@ authRouter.post(
 );
 
 authRouter.post("/logout", checkSessionMiddleware, logout);
+
+authRouter.post("/check-session", checkSessionMiddleware, checkSession);
 
 export default function setupAuthSocketListeners(io: Server) {}

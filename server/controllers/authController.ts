@@ -92,3 +92,16 @@ export const logout = async (req: Request, res: Response) => {
         res.json({ message: "Cannot log in. Try again later." });
     }
 };
+
+export const checkSession = async (req: Request, res: Response) => {
+    try {
+        const session = req.session as IUserSession;
+        const user = UserModel.getProfileFromUser(
+            await UserModel.findById(session.userId)
+        );
+
+        return res.json(user);
+    } catch (error) {
+        res.json({ message: "Cannot log in. Try again later." });
+    }
+};

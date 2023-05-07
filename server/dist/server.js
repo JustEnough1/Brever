@@ -37,7 +37,7 @@ const users_1 = require("./routes/users");
 const contacts_1 = __importDefault(require("./routes/contacts"));
 const messaging_1 = __importDefault(require("./routes/messaging"));
 dotenv_1.default.config();
-const PORT = 3001;
+const PORT = process.env.SERVER_PORT;
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
@@ -52,6 +52,7 @@ const sessionMiddleware = (0, express_session_1.default)({
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 },
 });
+app.use(express_1.default.static("public"));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
     origin: "http://localhost:3000",

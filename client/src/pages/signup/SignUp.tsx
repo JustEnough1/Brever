@@ -1,15 +1,21 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import logo from "../../logo.svg";
 import bg from "./bg_curve.svg";
+import { AppContext } from "../../AppContext";
+import { io } from "socket.io-client";
 
 export default function SignUpPage() {
+    const { setSocket, setUser } = useContext(AppContext);
     let [step, setStep] = useState(1);
     let [firstname, setFirstname] = useState("");
     let [lastname, setLastname] = useState("");
     let [username, setUsername] = useState("");
     let [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     const handleNextStep = () => {
         if (firstname.length <= 0)
@@ -59,7 +65,9 @@ export default function SignUpPage() {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
+            setUser(data);
+            setSocket(io("ws://localhost:3001/", { withCredentials: true }));
+            navigate("/login");
         } else {
             console.error("Registration failed.");
             const data = await response.json();
@@ -68,10 +76,10 @@ export default function SignUpPage() {
     };
     return (
         <form
-            className="login h-full flex items-center justify-center"
+            className="login h-full flex items-center justify-center "
             onSubmit={handleSubmit}
         >
-            <div className="wrapper flex flex-col items-center">
+            <div className="wrapper flex flex-col items-center z-10">
                 <img src={logo} alt="logo" className="w-48 pb-3" />
 
                 <h4 className="text-white pb-8">Sign up</h4>
@@ -132,7 +140,11 @@ export default function SignUpPage() {
                             <Button text="Sign up" type="submit" />
                         </div>
                     )}
-                    <p className="text-slate-200">I already have an account</p>
+                    <Link to={"/login"}>
+                        <p className="text-slate-200">
+                            I already have an account
+                        </p>
+                    </Link>
                 </div>
             </div>
             <img src={bg} className="absolute bottom-0 left-0 w-full" />

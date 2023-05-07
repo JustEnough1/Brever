@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.login = exports.signup = void 0;
+exports.checkSession = exports.logout = exports.login = exports.signup = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const User_1 = require("../models/User");
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -83,3 +83,14 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.logout = logout;
+const checkSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const session = req.session;
+        const user = User_1.UserModel.getProfileFromUser(yield User_1.UserModel.findById(session.userId));
+        return res.json(user);
+    }
+    catch (error) {
+        res.json({ message: "Cannot log in. Try again later." });
+    }
+});
+exports.checkSession = checkSession;

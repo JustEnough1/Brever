@@ -1,0 +1,14 @@
+.navigation-menu {
+    width: 25%;
+    background-color: #202020;
+}
+
+.navigation-menu i {
+    font-size: 32px;
+}
+
+@media (max-width: 639px) {
+    .navigation-menu {
+        width: 75%;
+    }
+}
