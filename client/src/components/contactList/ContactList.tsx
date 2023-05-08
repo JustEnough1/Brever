@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Contact from "../contact/Contact";
 import { IProfile } from "../../ts/interfaces/IProfile";
 
@@ -13,6 +13,12 @@ type Props = {
 };
 
 export default function ContactList({ contacts }: Props) {
+    const [localContacts, setLocalContacts] = useState(contacts);
+
+    useEffect(() => {
+        setLocalContacts(contacts);
+    }, [contacts]);
+
     if (contacts.length === 0)
         return (
             <div className="wrapper flex justify-center items-center">
@@ -24,7 +30,7 @@ export default function ContactList({ contacts }: Props) {
 
     return (
         <div className="wrapper text-white overflow-scroll">
-            {contacts.map((contact) => {
+            {localContacts.map((contact) => {
                 return (
                     <Contact
                         profile={contact.profile}
