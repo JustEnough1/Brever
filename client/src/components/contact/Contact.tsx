@@ -2,6 +2,7 @@ import React from "react";
 import { IProfile } from "../../ts/interfaces/IProfile";
 
 type Props = {
+    openChat: Function;
     profile: IProfile;
     lastMessage?: {
         message: string;
@@ -9,9 +10,12 @@ type Props = {
     };
 };
 
-export default function Contact({ profile, lastMessage }: Props) {
+export default function Contact({ profile, lastMessage, openChat }: Props) {
     return (
-        <div className="flex items-center p-3 border-b border-gray-600 hover:bg-zinc-600">
+        <div
+            className="flex items-center p-3 border-b border-gray-600 hover:bg-zinc-600"
+            onClick={() => openChat(profile)}
+        >
             <img
                 className="w-12 h-12 rounded-full mr-4"
                 src={`http://localhost:3001/images/avatars/${profile.avatar}`}

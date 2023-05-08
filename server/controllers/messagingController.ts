@@ -16,7 +16,7 @@ export const sendMessage = async (
         const contactIds = [session.userId, receiverId].sort();
         io.to(`chat-${contactIds[0]}-${contactIds[1]}`).emit(
             "send_message",
-            result
+            result[0]
         );
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ export const fetchMessages = async (
         const session = socket.request.session as IUserSession;
 
         const messages = await Message.find(session.userId, friendId, offset);
-        socket.emit("fetch_messages", messages);
+        socket.emit("fetch_messages", messages.reverse());
     } catch (error) {
         socket.emit("error", { error: "Error" });
     }

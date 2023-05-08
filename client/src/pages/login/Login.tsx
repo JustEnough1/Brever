@@ -45,8 +45,8 @@ export default function LoginPage() {
             });
 
             if (response.ok) {
-                const data: IProfile = await response.json();
-                setUser(data);
+                const data = await response.json();
+                setUser(data.user);
                 setSocket(
                     io("ws://localhost:3001/", { withCredentials: true })
                 );

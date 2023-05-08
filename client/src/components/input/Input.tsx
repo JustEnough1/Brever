@@ -6,6 +6,7 @@ type Props = {
     type?: HTMLInputTypeAttribute;
     width?: string;
     changeHandler?: ChangeEventHandler<HTMLInputElement>;
+    classes?: string;
 };
 
 export default function Input({
@@ -14,13 +15,15 @@ export default function Input({
     value,
     type,
     width,
+    classes,
 }: Props) {
     return (
         <input
-            className={`text-white rounded p-2`}
+            className={`text-white rounded p-2 ${classes}`}
             style={{
                 backgroundColor: "#202020",
-                width: width ? width : "auto",
+
+                width: width ? width : "",
             }}
             type={type ? type : "text"}
             value={value}

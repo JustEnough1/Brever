@@ -16,7 +16,7 @@ const sendMessage = (socket, io, receiverId, message) => __awaiter(void 0, void 
         const session = socket.request.session;
         const result = yield Message_1.Message.save(session.userId, receiverId, message);
         const contactIds = [session.userId, receiverId].sort();
-        io.to(`chat-${contactIds[0]}-${contactIds[1]}`).emit("send_message", result);
+        io.to(`chat-${contactIds[0]}-${contactIds[1]}`).emit("send_message", result[0]);
     }
     catch (error) {
         console.log(error);
@@ -28,7 +28,7 @@ const fetchMessages = (socket, friendId, offset) => __awaiter(void 0, void 0, vo
     try {
         const session = socket.request.session;
         const messages = yield Message_1.Message.find(session.userId, friendId, offset);
-        socket.emit("fetch_messages", messages);
+        socket.emit("fetch_messages", messages.reverse());
     }
     catch (error) {
         socket.emit("error", { error: "Error" });

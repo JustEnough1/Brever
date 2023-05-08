@@ -6,6 +6,7 @@ import { AppContext } from "../../AppContext";
 import { useRequireLogin } from "../../hooks/useRequireLogin";
 import NavigationMenu from "../../components/navigationMenu/navigationMenu";
 import { IProfile } from "../../ts/interfaces/IProfile";
+import Chat from "../../components/chat/Chat";
 
 type Props = {};
 
@@ -13,6 +14,7 @@ export default function ContactsPage({}: Props) {
     useRequireLogin();
     const { user, socket, setIsLoading, isLoading } = useContext(AppContext);
     let [contacts, setContacts] = useState<IProfile[]>([]);
+    let [chatWith, setChatWith] = useState<IProfile | null>(null);
 
     const filterContacts = (event: ChangeEvent<HTMLInputElement>) => {
         const searchValue = event.target.value.toLowerCase();
@@ -34,6 +36,10 @@ export default function ContactsPage({}: Props) {
         setContacts(sortedContacts);
     };
 
+    const openChat = (contact: IProfile) => {
+        setChatWith(contact);
+    };
+
     useEffect(() => {
         setIsLoading(true);
         socket?.emit("get_contacts");
@@ -52,6 +58,10 @@ export default function ContactsPage({}: Props) {
         <>
             {user && (
                 <Layout>
+                    {chatWith && (
+                        <Chat setChatWith={setChatWith} contact={chatWith} />
+                    )}
+
                     <div className="wrapper">
                         <div className="h-full relative flex justify-center items-center">
                             <Input
@@ -64,6 +74,7 @@ export default function ContactsPage({}: Props) {
                     </div>
                     {!isLoading && (
                         <ContactList
+                            openChat={openChat}
                             contacts={
                                 contacts.length > 0
                                     ? contacts.map((contact) => ({

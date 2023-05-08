@@ -96,6 +96,7 @@ export const logout = async (req: Request, res: Response) => {
 export const checkSession = async (req: Request, res: Response) => {
     try {
         const session = req.session as IUserSession;
+
         const user = UserModel.getProfileFromUser(
             await UserModel.findById(session.userId)
         );

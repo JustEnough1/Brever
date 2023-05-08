@@ -3,6 +3,7 @@ import Contact from "../contact/Contact";
 import { IProfile } from "../../ts/interfaces/IProfile";
 
 type Props = {
+    openChat: Function;
     contacts: {
         profile: IProfile;
         lastMessage?: {
@@ -12,7 +13,7 @@ type Props = {
     }[];
 };
 
-export default function ContactList({ contacts }: Props) {
+export default function ContactList({ contacts, openChat }: Props) {
     const [localContacts, setLocalContacts] = useState(contacts);
 
     useEffect(() => {
@@ -33,6 +34,7 @@ export default function ContactList({ contacts }: Props) {
             {localContacts.map((contact) => {
                 return (
                     <Contact
+                        openChat={openChat}
                         profile={contact.profile}
                         lastMessage={contact.lastMessage}
                         key={contact.profile.id}

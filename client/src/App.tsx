@@ -6,8 +6,8 @@ import {
     BrowserRouter,
     Routes,
     Route,
-    Outlet,
     Navigate,
+    useLocation,
 } from "react-router-dom";
 import ContactsPage from "./pages/contacts/ContactsPage";
 import { IProfile } from "./ts/interfaces/IProfile";
