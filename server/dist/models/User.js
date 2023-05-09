@@ -40,7 +40,16 @@ class UserModel {
     }
     static findBySearchValue(searchValue, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let users = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT * FROM users WHERE username LIKE "%${searchValue}%" AND id != ${userId}`);
+            let users = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT *
+            FROM users
+            WHERE username LIKE '%${searchValue}%'
+            AND id != ${userId}
+            AND id NOT IN (
+                SELECT friend_id
+                FROM contacts
+                WHERE user_id = ${userId}
+            );
+            `);
             users = users.map((user) => {
                 return UserModel.getProfileFromUser(user);
             });

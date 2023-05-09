@@ -65,7 +65,7 @@ export default function ContactsPage({}: Props) {
                     <div className="wrapper">
                         <div className="h-full relative flex justify-center items-center">
                             <Input
-                                placeholder={"Search"}
+                                placeholder={"Search in contacts"}
                                 type="search"
                                 width="50%"
                                 changeHandler={filterContacts}

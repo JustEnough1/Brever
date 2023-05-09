@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+import React, {
+    ChangeEvent,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import Layout from "../layout/Layout";
 import Message from "../message/Message";
 import { IProfile } from "../../ts/interfaces/IProfile";
@@ -12,9 +18,12 @@ type Props = {
 };
 
 export default function Chat({ contact, setChatWith }: Props) {
-    const { socket } = useContext(AppContext);
+    const { socket, setIsLoading, isLoading } = useContext(AppContext);
     let [newMessage, setNewMessage] = useState("");
     let [messages, setMessages] = useState<IMessage[]>([]);
+    let [messagesOffset, setMessagesOffset] = useState(0);
+    const [prevScrollHeight, setPrevScrollHeight] = useState(0);
+    const messagesRef = useRef<HTMLDivElement>(null);
 
     const sendMessage = (message: string) => {
         socket?.emit("send_message", { receiverId: contact.id, message });
@@ -24,12 +33,35 @@ export default function Chat({ contact, setChatWith }: Props) {
         setNewMessage(event.target.value);
     };
 
+    const fetchMessages = () => {
+        setIsLoading(true);
+        socket?.emit("fetch_messages", {
+            friendId: contact.id,
+            offset: messagesOffset,
+        });
+
+        setMessagesOffset(messagesOffset + 20);
+        setIsLoading(false);
+        setPrevScrollHeight(messagesRef.current?.scrollHeight || 0);
+    };
+
+    useEffect(() => {
+        if (messagesRef.current) {
+            if (prevScrollHeight !== messagesRef.current.scrollHeight) {
+                const scrollTop =
+                    messagesRef.current.scrollHeight - prevScrollHeight;
+                messagesRef.current?.scrollBy(0, scrollTop);
+            }
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        messagesRef.current?.scrollTo(0, messagesRef.current.scrollHeight);
+    }, []);
+
     useEffect(() => {
         if (contact) {
-            socket?.emit("fetch_messages", {
-                friendId: contact.id,
-                offset: 0,
-            });
+            fetchMessages();
         }
 
         socket?.on("send_message", (message: IMessage) => {
@@ -41,7 +73,7 @@ export default function Chat({ contact, setChatWith }: Props) {
         });
 
         socket?.on("fetch_messages", (messages: IMessage[]) => {
-            setMessages(messages);
+            setMessages((prevState) => [...messages, ...prevState]);
         });
     }, [contact]);
 
@@ -69,7 +101,16 @@ export default function Chat({ contact, setChatWith }: Props) {
                         </div>
                     </div>
                 </div>
-                <div className="wrapper text-white overflow-scroll">
+                <div
+                    ref={messagesRef}
+                    className="wrapper text-white overflow-scroll"
+                >
+                    <div
+                        className="flex justify-center p-5 cursor-pointer"
+                        onClick={() => fetchMessages()}
+                    >
+                        <h6>Load more</h6>
+                    </div>
                     {messages.map((message, index) => {
                         const date = new Date(message.created_at);
                         message.created_at = `${date.toLocaleDateString()} ${date.toLocaleTimeString(

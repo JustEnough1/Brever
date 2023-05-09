@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.acceptFriendRequest = exports.sendFriendRequest = exports.getContacts = void 0;
+exports.declineFriendRequest = exports.acceptFriendRequest = exports.sendFriendRequest = exports.getRequests = exports.getContacts = void 0;
 const Contact_1 = require("../models/Contact");
 const contactStatus_1 = require("../ts/enums/contactStatus");
 const getContacts = (socket) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,9 +27,23 @@ const getContacts = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getContacts = getContacts;
+const getRequests = (socket) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const session = socket.request.session;
+        const requests = yield Contact_1.ContactsModel.findAllRequests(session.userId);
+        socket.emit("get_requests", requests);
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.getRequests = getRequests;
 const sendFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
+        const areContacts = yield Contact_1.ContactsModel.areContacts(session.userId, friendId);
+        if (areContacts)
+            return;
         yield Contact_1.ContactsModel.save(session.userId, friendId, contactStatus_1.ContactStatus.PENDING);
     }
     catch (error) {
@@ -47,3 +61,13 @@ const acceptFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void
     }
 });
 exports.acceptFriendRequest = acceptFriendRequest;
+const declineFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const session = socket.request.session;
+        yield Contact_1.ContactsModel.save(friendId, session.userId, contactStatus_1.ContactStatus.DECLINED);
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.declineFriendRequest = declineFriendRequest;

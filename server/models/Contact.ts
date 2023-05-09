@@ -14,6 +14,9 @@ export class ContactsModel {
                     query = `INSERT INTO contacts (user_id, friend_id, status) VALUES (${userId}, ${friendId}, '${status}'), (${friendId}, ${userId}, '${status}') ON DUPLICATE KEY UPDATE status = VALUES(status);`;
                     break;
 
+                case ContactStatus.DECLINED:
+                    query = `DELETE FROM contacts WHERE user_id = ${userId} AND friend_id = ${friendId} AND status = '${ContactStatus.PENDING}'`;
+                    break;
                 default:
                     break;
             }
@@ -31,6 +34,17 @@ export class ContactsModel {
             FROM contacts
             INNER JOIN users ON friend_id = users.id
             WHERE user_id = ${userId} AND status = '${ContactStatus.ACCEPTED}'
+            `
+        );
+    }
+
+    static async findAllRequests(userId: number): Promise<IProfile[]> {
+        return await DatabaseManager.executeQuery(
+            `
+            SELECT users.id, users.first_name, users.last_name, users.avatar
+            FROM contacts
+            INNER JOIN users ON user_id = users.id
+            WHERE friend_id = ${userId} AND status = '${ContactStatus.PENDING}'
             `
         );
     }

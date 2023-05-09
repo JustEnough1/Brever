@@ -13,36 +13,70 @@ const contactsController_1 = require("../controllers/contactsController");
 const checkSession_1 = require("../middlewares/checkSession");
 function setupContactsSocketListeners(io) {
     io.on("connection", (socket) => {
-        socket.on("get_contacts", () => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                    (0, contactsController_1.getContacts)(socket);
-                });
-            }
-            catch (error) {
-                socket.emit("error", { error: "Error" });
-            }
-        }));
-        socket.on("send_friend_request", ({ friendId }) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                    (0, contactsController_1.sendFriendRequest)(socket, friendId);
-                });
-            }
-            catch (error) {
-                socket.emit("error", { message: "Error" });
-            }
-        }));
-        socket.on("accept_friend_request", ({ friendId }) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
-                    (0, contactsController_1.acceptFriendRequest)(socket, friendId);
-                });
-            }
-            catch (error) {
-                socket.emit("error", { message: "Error" });
-            }
-        }));
+        try {
+            socket.on("get_contacts", () => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
+                        (0, contactsController_1.getContacts)(socket);
+                    });
+                }
+                catch (error) {
+                    socket.emit("error", { error: "Error" });
+                }
+            }));
+            socket.on("get_requests", () => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
+                        (0, contactsController_1.getRequests)(socket);
+                    });
+                }
+                catch (error) {
+                    socket.emit("error", { error: "Error" });
+                }
+            }));
+            socket.on("send_friend_request", (payload) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
+                        if (payload.friendId)
+                            (0, contactsController_1.sendFriendRequest)(socket, payload.friendId);
+                    });
+                }
+                catch (error) {
+                    socket.emit("error", { message: "Error" });
+                }
+            }));
+            socket.on("accept_friend_request", (payload) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
+                        if (payload.friendId)
+                            (0, contactsController_1.acceptFriendRequest)(socket, payload.friendId);
+                        else {
+                            throw new Error("Please provide payload.");
+                        }
+                    });
+                }
+                catch (error) {
+                    socket.emit("error", { message: error });
+                }
+            }));
+            socket.on("decline_friend_request", (payload) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
+                        if (payload.friendId)
+                            (0, contactsController_1.declineFriendRequest)(socket, payload.friendId);
+                        else {
+                            throw new Error("Please provide payload.");
+                        }
+                    });
+                }
+                catch (error) {
+                    socket.emit("error", { message: error });
+                }
+            }));
+        }
+        catch (error) {
+            console.log(error);
+        }
     });
 }
 exports.default = setupContactsSocketListeners;

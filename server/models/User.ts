@@ -39,7 +39,16 @@ export class UserModel {
 
     static async findBySearchValue(searchValue: string, userId: number) {
         let users = await DatabaseManager.executeQuery(
-            `SELECT * FROM users WHERE username LIKE "%${searchValue}%" AND id != ${userId}`
+            `SELECT *
+            FROM users
+            WHERE username LIKE '%${searchValue}%'
+            AND id != ${userId}
+            AND id NOT IN (
+                SELECT friend_id
+                FROM contacts
+                WHERE user_id = ${userId}
+            );
+            `
         );
 
         users = users.map((user: IUser) => {

@@ -31,10 +31,14 @@ export default function ContactList({ contacts, openChat }: Props) {
 
     return (
         <div className="wrapper text-white overflow-scroll">
+            <h3 className="text-white my-2">Contacts</h3>
             {localContacts.map((contact) => {
                 return (
                     <Contact
-                        openChat={openChat}
+                        callback={{
+                            handleClick: openChat,
+                            params: contact.profile,
+                        }}
                         profile={contact.profile}
                         lastMessage={contact.lastMessage}
                         key={contact.profile.id}

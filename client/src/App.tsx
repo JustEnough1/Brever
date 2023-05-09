@@ -14,6 +14,7 @@ import { IProfile } from "./ts/interfaces/IProfile";
 import { Socket, io } from "socket.io-client";
 import { AppContext } from "./AppContext";
 import Loader from "./components/loader/Loader";
+import Requests from "./pages/requests/Requests";
 
 function App() {
     const [user, setUser] = useState<IProfile | null>(null);
@@ -66,6 +67,7 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/" element={<ContactsPage />} />
+                    <Route path="/requests" element={<Requests />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </BrowserRouter>

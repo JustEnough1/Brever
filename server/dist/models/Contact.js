@@ -24,6 +24,9 @@ class ContactsModel {
                     case contactStatus_1.ContactStatus.ACCEPTED:
                         query = `INSERT INTO contacts (user_id, friend_id, status) VALUES (${userId}, ${friendId}, '${status}'), (${friendId}, ${userId}, '${status}') ON DUPLICATE KEY UPDATE status = VALUES(status);`;
                         break;
+                    case contactStatus_1.ContactStatus.DECLINED:
+                        query = `DELETE FROM contacts WHERE user_id = ${userId} AND friend_id = ${friendId} AND status = '${contactStatus_1.ContactStatus.PENDING}'`;
+                        break;
                     default:
                         break;
                 }
@@ -41,6 +44,16 @@ class ContactsModel {
             FROM contacts
             INNER JOIN users ON friend_id = users.id
             WHERE user_id = ${userId} AND status = '${contactStatus_1.ContactStatus.ACCEPTED}'
+            `);
+        });
+    }
+    static findAllRequests(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield DatabaseManager_1.DatabaseManager.executeQuery(`
+            SELECT users.id, users.first_name, users.last_name, users.avatar
+            FROM contacts
+            INNER JOIN users ON user_id = users.id
+            WHERE friend_id = ${userId} AND status = '${contactStatus_1.ContactStatus.PENDING}'
             `);
         });
     }

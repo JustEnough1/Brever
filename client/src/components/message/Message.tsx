@@ -10,8 +10,6 @@ type Props = {
 export default function Message({ message }: Props) {
     const { user } = useContext(AppContext);
 
-    console.log(user);
-
     const isSentByCurrentUser = message.sender_id === user?.id;
 
     return (

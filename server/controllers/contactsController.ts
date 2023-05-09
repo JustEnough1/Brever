@@ -20,9 +20,28 @@ export const getContacts = async (socket: Socket) => {
     }
 };
 
+export const getRequests = async (socket: Socket) => {
+    try {
+        const session = socket.request.session as IUserSession;
+
+        const requests = await ContactsModel.findAllRequests(session.userId);
+
+        socket.emit("get_requests", requests);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const sendFriendRequest = async (socket: Socket, friendId: number) => {
     try {
         const session = socket.request.session as IUserSession;
+
+        const areContacts = await ContactsModel.areContacts(
+            session.userId,
+            friendId
+        );
+
+        if (areContacts) return;
 
         await ContactsModel.save(
             session.userId,
@@ -42,6 +61,23 @@ export const acceptFriendRequest = async (socket: Socket, friendId: number) => {
             session.userId,
             friendId,
             ContactStatus.ACCEPTED
+        );
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const declineFriendRequest = async (
+    socket: Socket,
+    friendId: number
+) => {
+    try {
+        const session = socket.request.session as IUserSession;
+
+        await ContactsModel.save(
+            friendId,
+            session.userId,
+            ContactStatus.DECLINED
         );
     } catch (error) {
         console.log(error);
