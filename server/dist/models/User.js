@@ -69,21 +69,22 @@ class UserModel {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `UPDATE users SET `;
             if (user.username) {
-                query += `username= '${user.username}'`;
+                query += ` username = '${user.username}',`;
             }
             if (user.password) {
                 const { hashedPassword, salt } = UserModel.hashPassword(user.password);
-                query += `, password= '${hashedPassword}', salt= '${salt}'`;
+                query += ` password = '${hashedPassword}', salt = '${salt}',`;
             }
             if (user.first_name) {
-                query += `, first_name= '${user.first_name}'`;
+                query += ` first_name = '${user.first_name}',`;
             }
             if (user.last_name) {
-                query += `, last_name= '${user.last_name}'`;
+                query += ` last_name = '${user.last_name}',`;
             }
             if (user.avatar) {
-                query += `, avatar= '${user.avatar}'`;
+                query += ` avatar = '${user.avatar}',`;
             }
+            query = query.slice(0, -1);
             query += `, updated_at = NOW() WHERE id = ${userId}`;
             return yield DatabaseManager_1.DatabaseManager.executeQuery(query);
         });

@@ -1,4 +1,7 @@
 client/node_modules
 server/node_modules
 server/.env
+server/public/images/avatars/*
 .DS_Store
+
+!server/public/images/avatars/default.jpg

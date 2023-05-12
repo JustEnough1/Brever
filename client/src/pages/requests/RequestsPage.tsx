@@ -9,7 +9,7 @@ import Contact from "../../components/contact/Contact";
 
 type Props = {};
 
-export default function Requests({}: Props) {
+export default function RequestsPage({}: Props) {
     useRequireLogin();
     const { user, socket } = useContext(AppContext);
     let [requests, setRequests] = useState<IProfile[]>([]);
@@ -19,9 +19,11 @@ export default function Requests({}: Props) {
 
     const acceptRequest = (friendId: number) => {
         socket?.emit("accept_friend_request", { friendId });
+        socket?.emit("get_requests", {});
     };
     const declineRequest = (friendId: number) => {
         socket?.emit("decline_friend_request", { friendId });
+        socket?.emit("get_requests", {});
     };
 
     const delayedSearch = (value: string) => {

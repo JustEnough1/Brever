@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
-import LoginPage from "./pages/login/Login";
-import SignUpPage from "./pages/signup/SignUp";
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Navigate,
-    useLocation,
-} from "react-router-dom";
+import LoginPage from "./pages/login/LoginPage";
+import SignUpPage from "./pages/signup/SignUpPage";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ContactsPage from "./pages/contacts/ContactsPage";
 import { IProfile } from "./ts/interfaces/IProfile";
 import { Socket, io } from "socket.io-client";
 import { AppContext } from "./AppContext";
 import Loader from "./components/loader/Loader";
-import Requests from "./pages/requests/Requests";
+import RequestsPage from "./pages/requests/RequestsPage";
+import SettingsPage from "./pages/settings/SettingsPage";
 
 function App() {
     const [user, setUser] = useState<IProfile | null>(null);
@@ -67,7 +61,8 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/" element={<ContactsPage />} />
-                    <Route path="/requests" element={<Requests />} />
+                    <Route path="/requests" element={<RequestsPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </BrowserRouter>

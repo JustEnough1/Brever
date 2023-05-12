@@ -91,7 +91,7 @@ export default function Chat({ contact, setChatWith }: Props) {
                         ></i>
                         <div className="flex items-center">
                             <img
-                                className="w-12 h-12 rounded-full mr-4"
+                                className="w-12 h-12 rounded-full object-cover mr-4"
                                 src={`http://localhost:3001/images/avatars/${contact.avatar}`}
                                 alt="avatar"
                             />
@@ -113,10 +113,16 @@ export default function Chat({ contact, setChatWith }: Props) {
                     </div>
                     {messages.map((message, index) => {
                         const date = new Date(message.created_at);
-                        message.created_at = `${date.toLocaleDateString()} ${date.toLocaleTimeString(
-                            [],
-                            { hour: "2-digit", minute: "2-digit" }
-                        )}`;
+                        const formattedDate = date.toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                        });
+                        const formattedTime = date.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        });
+                        message.created_at = `${formattedDate} ${formattedTime}`;
                         return <Message key={index} message={message} />;
                     })}
                 </div>

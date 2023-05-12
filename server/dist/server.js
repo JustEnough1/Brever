@@ -22,20 +22,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.upload = void 0;
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const multer_1 = __importDefault(require("multer"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const auth_1 = __importStar(require("./routes/auth"));
 const users_1 = require("./routes/users");
 const contacts_1 = __importDefault(require("./routes/contacts"));
 const messaging_1 = __importDefault(require("./routes/messaging"));
+const User_1 = require("./models/User");
 dotenv_1.default.config();
 const PORT = process.env.SERVER_PORT;
 const app = (0, express_1.default)();
@@ -67,6 +79,14 @@ app.use("/users", users_1.usersRouter);
 (0, contacts_1.default)(io);
 (0, auth_1.default)(io);
 (0, messaging_1.default)(io);
+const storage = multer_1.default.diskStorage({
+    destination: "./public/images/avatars/",
+    filename: (req, file, cb) => __awaiter(void 0, void 0, void 0, function* () {
+        const username = yield (yield User_1.UserModel.findById(req.session.userId)).username;
+        cb(null, `${username}.jpg`);
+    }),
+});
+exports.upload = (0, multer_1.default)({ storage }).single("avatar");
 httpServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

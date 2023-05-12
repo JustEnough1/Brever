@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import cors from "cors";
 import dotenv from "dotenv";
+import multer from "multer";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import setupAuthSocketListeners, { authRouter } from "./routes/auth";
@@ -14,6 +15,7 @@ import {
 } from "./ts/interfaces/ISocketIO";
 import setupContactsSocketListeners from "./routes/contacts";
 import setupMessagingSocketListeners from "./routes/messaging";
+import { UserModel } from "./models/User";
 
 dotenv.config();
 
@@ -66,6 +68,18 @@ app.use("/users", usersRouter);
 setupContactsSocketListeners(io);
 setupAuthSocketListeners(io);
 setupMessagingSocketListeners(io);
+
+const storage = multer.diskStorage({
+    destination: "./public/images/avatars/",
+    filename: async (req, file, cb) => {
+        const username = await (
+            await UserModel.findById(req.session.userId)
+        ).username;
+        cb(null, `${username}.jpg`);
+    },
+});
+
+export const upload = multer({ storage }).single("avatar");
 
 httpServer.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

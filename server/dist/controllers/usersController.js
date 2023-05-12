@@ -11,24 +11,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.searchUser = exports.updateUser = void 0;
 const User_1 = require("../models/User");
+const server_1 = require("../server");
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = req.session;
-        const { username, password, first_name, last_name, avatar } = req.body;
-        yield User_1.UserModel.update(session.userId, {
-            username,
-            password,
-            first_name,
-            last_name,
-            avatar,
-        }).catch((err) => {
-            throw err;
-        });
-        const profile = User_1.UserModel.getProfileFromUser(yield User_1.UserModel.findById(session.userId));
-        res.json(profile);
+        (0, server_1.upload)(req, res, (err) => __awaiter(void 0, void 0, void 0, function* () {
+            if (err) {
+                return res
+                    .status(500)
+                    .json({ message: "Error uploading file" });
+            }
+            const { username, password, first_name, last_name } = req.body;
+            const avatar = req.file ? req.file.filename : undefined;
+            yield User_1.UserModel.update(session.userId, {
+                username,
+                password,
+                first_name,
+                last_name,
+                avatar,
+            });
+            const profile = User_1.UserModel.getProfileFromUser(yield User_1.UserModel.findById(req.session.userId));
+            res.json(profile);
+        }));
     }
     catch (error) {
-        return res.status(500).json({ message: "Cannot update user." });
+        res.status(500).json({ message: "Cannot update user." });
     }
 });
 exports.updateUser = updateUser;

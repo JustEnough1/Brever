@@ -32,7 +32,7 @@ export default function Contact({
             }}
         >
             <img
-                className="w-12 h-12 rounded-full mr-4"
+                className="w-12 h-12 rounded-full object-cover mr-4"
                 src={`http://localhost:3001/images/avatars/${profile.avatar}`}
                 alt="avatar"
             />
