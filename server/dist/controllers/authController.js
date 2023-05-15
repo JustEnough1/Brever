@@ -34,7 +34,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ user: profile });
     }
     catch (error) {
-        res.send({
+        res.status(500).send({
             message: "Cannot create new account. Try again later.",
         });
     }
@@ -65,7 +65,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ user: profile });
     }
     catch (error) {
-        res.json({ message: "Cannot log in. Try again later." });
+        res.status(500).json({ message: "Cannot log in. Try again later." });
     }
 });
 exports.login = login;
@@ -79,7 +79,7 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (error) {
-        res.json({ message: "Cannot log in. Try again later." });
+        res.status(500).json({ message: "Cannot log in. Try again later." });
     }
 });
 exports.logout = logout;
@@ -90,7 +90,7 @@ const checkSession = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.json(user);
     }
     catch (error) {
-        res.json({ message: "Cannot log in. Try again later." });
+        res.status(500).json({ message: "Cannot log in. Try again later." });
     }
 });
 exports.checkSession = checkSession;

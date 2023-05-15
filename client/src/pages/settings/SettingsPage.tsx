@@ -6,6 +6,7 @@ import NavigationMenu from "../../components/navigationMenu/navigationMenu";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import { IProfile } from "../../ts/interfaces/IProfile";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
@@ -17,7 +18,9 @@ export default function SettingsPage({}: Props) {
     let [username, setUsername] = useState(user?.username);
     let [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
     let [avatar, setAvatar] = useState(null);
-    let [password, setPassword] = useState("***");
+    let [password, setPassword] = useState("Enter Your new password");
+
+    const navigate = useNavigate();
 
     const handleFirstnameChange = (event: ChangeEvent<HTMLInputElement>) => {
         setFirstname(event.target.value);
@@ -52,6 +55,8 @@ export default function SettingsPage({}: Props) {
             if (lastname && lastname !== user?.last_name)
                 formData.append("last_name", lastname);
 
+            if (password) formData.append("password", password);
+
             const response = await fetch("http://localhost:3001/users", {
                 method: "PUT",
                 body: formData,
@@ -64,6 +69,29 @@ export default function SettingsPage({}: Props) {
             }
         } catch (error) {
             alert(error);
+        }
+    };
+
+    const handleLogout = async () => {
+        const response = await fetch("http://localhost:3001/auth/logout", {
+            credentials: "include",
+            method: "POST",
+        });
+
+        navigate("/login");
+    };
+
+    const handleDeleteUser = async () => {
+        const result = window.confirm("Are you sure you want to proceed?");
+
+        if (result) {
+            const response = await fetch("http://localhost:3001/users/", {
+                credentials: "include",
+                method: "DELETE",
+            });
+
+            setUser(null);
+            navigate("/login");
         }
     };
 
@@ -109,6 +137,10 @@ export default function SettingsPage({}: Props) {
                                         />
                                     </div>
                                     <div className="flex flex-col gap-y-2">
+                                        <small className="my-5">
+                                            Fill in all the fields You want to
+                                            change
+                                        </small>
                                         <Input
                                             placeholder={user.first_name}
                                             changeHandler={
@@ -119,9 +151,17 @@ export default function SettingsPage({}: Props) {
                                             placeholder={user.last_name}
                                             changeHandler={handleLastnameChange}
                                         />
+                                        <hr className="my-5" />
                                         <Input
                                             placeholder={user.username}
                                             changeHandler={handleUsernameChange}
+                                        />
+                                        <Input
+                                            placeholder={
+                                                "Enter Your new password"
+                                            }
+                                            type="password"
+                                            changeHandler={handlePasswordChange}
                                         />
                                         <Button
                                             text="Update info"
@@ -135,9 +175,12 @@ export default function SettingsPage({}: Props) {
                         <div className="my-5 border-b border-gray-600 py-5">
                             <h4 className="pb-5">Actions</h4>
                             <div className="flex gap-x-10">
-                                <Button text="Logout" />
-                                <Button text="Change password" />
-                                <Button isDanger={true} text="Delete account" />
+                                <Button text="Logout" onClick={handleLogout} />
+                                <Button
+                                    isDanger={true}
+                                    text="Delete account"
+                                    onClick={handleDeleteUser}
+                                />
                             </div>
                         </div>
                     </div>

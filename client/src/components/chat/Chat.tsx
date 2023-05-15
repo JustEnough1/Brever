@@ -26,7 +26,22 @@ export default function Chat({ contact, setChatWith }: Props) {
     const messagesRef = useRef<HTMLDivElement>(null);
 
     const sendMessage = (message: string) => {
-        socket?.emit("send_message", { receiverId: contact.id, message });
+        const trimmedMessage = message.trim();
+
+        const sanitizedMessage = trimmedMessage
+            .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, "")
+            .replace(/'/g, "\\'");
+
+        if (sanitizedMessage === "" || sanitizedMessage.length === 0) {
+            alert("Message has wrong format.");
+            return;
+        }
+        console.log(sanitizedMessage.length);
+
+        socket?.emit("send_message", {
+            receiverId: contact.id,
+            message: sanitizedMessage,
+        });
     };
 
     const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {

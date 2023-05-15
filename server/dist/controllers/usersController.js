@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchUser = exports.updateUser = void 0;
+exports.deleteUser = exports.searchUser = exports.updateUser = void 0;
 const User_1 = require("../models/User");
 const server_1 = require("../server");
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -54,3 +54,14 @@ const searchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.searchUser = searchUser;
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield User_1.UserModel.delete(req.session.userId);
+        res.clearCookie("connect.sid", { path: "/" });
+        res.json({ message: "User has been deleted." });
+    }
+    catch (error) {
+        res.status(500).json({ error: "Error occured." });
+    }
+});
+exports.deleteUser = deleteUser;

@@ -55,3 +55,15 @@ export const searchUser = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Error occured." });
     }
 };
+
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const result = await UserModel.delete(req.session.userId);
+
+        res.clearCookie("connect.sid", { path: "/" });
+
+        res.json({ message: "User has been deleted." });
+    } catch (error) {
+        res.status(500).json({ error: "Error occured." });
+    }
+};

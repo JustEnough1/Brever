@@ -16,6 +16,11 @@ exports.UserModel = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const DatabaseManager_1 = require("../database/DatabaseManager");
 class UserModel {
+    static delete(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield DatabaseManager_1.DatabaseManager.executeQuery(`DELETE FROM users WHERE id = ${userId}`);
+        });
+    }
     static hashPassword(password) {
         const salt = bcryptjs_1.default.genSaltSync(10);
         const hashedPassword = bcryptjs_1.default.hashSync(password, salt);

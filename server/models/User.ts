@@ -2,6 +2,11 @@ import bcrypt from "bcryptjs";
 import { DatabaseManager } from "../database/DatabaseManager";
 
 export class UserModel {
+    static async delete(userId: number) {
+        return await DatabaseManager.executeQuery(
+            `DELETE FROM users WHERE id = ${userId}`
+        );
+    }
     static hashPassword(password: string) {
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
