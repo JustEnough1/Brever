@@ -56,6 +56,7 @@ function App() {
             }}
         >
             {isLoading && <Loader />}
+
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />

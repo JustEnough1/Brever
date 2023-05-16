@@ -22,7 +22,7 @@ export default function SignUpPage() {
             return alert("Please, enter Your firstname.");
         if (firstname.length > 255) return alert("Your firstname is too long.");
         if (lastname.length <= 0) return alert("Please, enter Your lastname.");
-        if (lastname.length <= 0) return alert("Your lastname is too long.");
+        if (lastname.length > 255) return alert("Your lastname is too long.");
 
         setStep(2);
     };

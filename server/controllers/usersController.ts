@@ -52,7 +52,7 @@ export const searchUser = async (req: Request, res: Response) => {
 
         res.json({ matchedUsers });
     } catch (error) {
-        res.status(500).json({ error: "Error occured." });
+        res.status(500).json({ message: "Cannot search users." });
     }
 };
 
@@ -64,6 +64,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 
         res.json({ message: "User has been deleted." });
     } catch (error) {
-        res.status(500).json({ error: "Error occured." });
+        res.status(500).json({ message: "Cannot delete user." });
     }
 };

@@ -24,6 +24,7 @@ const getContacts = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot get contacts." });
     }
 });
 exports.getContacts = getContacts;
@@ -35,6 +36,7 @@ const getRequests = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot get friend requests." });
     }
 });
 exports.getRequests = getRequests;
@@ -48,6 +50,7 @@ const sendFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void 0
     }
     catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot send friend request." });
     }
 });
 exports.sendFriendRequest = sendFriendRequest;
@@ -58,6 +61,7 @@ const acceptFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void
     }
     catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot accept request." });
     }
 });
 exports.acceptFriendRequest = acceptFriendRequest;
@@ -68,6 +72,7 @@ const declineFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, voi
     }
     catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot decline request." });
     }
 });
 exports.declineFriendRequest = declineFriendRequest;

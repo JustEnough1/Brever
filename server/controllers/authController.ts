@@ -36,8 +36,8 @@ export const signup = async (req: Request, res: Response) => {
 
         res.json({ user: profile });
     } catch (error) {
-        res.status(500).send({
-            message: "Cannot create new account. Try again later.",
+        res.status(500).json({
+            message: "Cannot create a new account.",
         });
     }
 };
@@ -76,7 +76,7 @@ export const login = async (req: Request, res: Response) => {
 
         res.json({ user: profile });
     } catch (error) {
-        res.status(500).json({ message: "Cannot log in. Try again later." });
+        res.status(500).json({ message: "Cannot log in." });
     }
 };
 
@@ -89,7 +89,7 @@ export const logout = async (req: Request, res: Response) => {
             return res.json({ message: "User has been logged out." });
         });
     } catch (error) {
-        res.status(500).json({ message: "Cannot log in. Try again later." });
+        res.status(500).json({ message: "Cannot log out." });
     }
 };
 
@@ -103,6 +103,6 @@ export const checkSession = async (req: Request, res: Response) => {
 
         return res.json(user);
     } catch (error) {
-        res.status(500).json({ message: "Cannot log in. Try again later." });
+        res.status(500).json({ message: "Cannot check session." });
     }
 };

@@ -50,7 +50,7 @@ const searchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json({ matchedUsers });
     }
     catch (error) {
-        res.status(500).json({ error: "Error occured." });
+        res.status(500).json({ message: "Cannot search users." });
     }
 });
 exports.searchUser = searchUser;
@@ -61,7 +61,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json({ message: "User has been deleted." });
     }
     catch (error) {
-        res.status(500).json({ error: "Error occured." });
+        res.status(500).json({ message: "Cannot delete user." });
     }
 });
 exports.deleteUser = deleteUser;

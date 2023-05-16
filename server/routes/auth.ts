@@ -2,17 +2,14 @@ import { Router } from "express";
 import { validateUsernameMiddleware } from "../middlewares/validateUsername";
 import { validatePasswordMiddleware } from "../middlewares/validatePassword";
 import { validateNameMiddleware } from "../middlewares/validateName";
-import {
-    checkSessionMiddleware,
-    checkSocketSessionMiddleware,
-} from "../middlewares/checkSession";
+import { checkSessionMiddleware } from "../middlewares/checkSession";
 import {
     checkSession,
     login,
     logout,
     signup,
 } from "../controllers/authController";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 
 export const authRouter = Router();
 

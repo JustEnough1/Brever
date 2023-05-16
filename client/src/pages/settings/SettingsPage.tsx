@@ -18,7 +18,7 @@ export default function SettingsPage({}: Props) {
     let [username, setUsername] = useState(user?.username);
     let [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
     let [avatar, setAvatar] = useState(null);
-    let [password, setPassword] = useState("Enter Your new password");
+    let [password, setPassword] = useState<string | null>(null);
 
     const navigate = useNavigate();
 

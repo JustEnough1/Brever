@@ -17,6 +17,7 @@ export const getContacts = async (socket: Socket) => {
         socket.emit("get_contacts", contacts);
     } catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot get contacts." });
     }
 };
 
@@ -29,6 +30,7 @@ export const getRequests = async (socket: Socket) => {
         socket.emit("get_requests", requests);
     } catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot get friend requests." });
     }
 };
 
@@ -50,6 +52,7 @@ export const sendFriendRequest = async (socket: Socket, friendId: number) => {
         );
     } catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot send friend request." });
     }
 };
 
@@ -64,6 +67,7 @@ export const acceptFriendRequest = async (socket: Socket, friendId: number) => {
         );
     } catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot accept request." });
     }
 };
 
@@ -81,5 +85,6 @@ export const declineFriendRequest = async (
         );
     } catch (error) {
         console.log(error);
+        socket.emit("error", { message: "Cannot decline request." });
     }
 };

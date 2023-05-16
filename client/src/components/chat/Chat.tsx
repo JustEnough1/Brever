@@ -36,7 +36,6 @@ export default function Chat({ contact, setChatWith }: Props) {
             alert("Message has wrong format.");
             return;
         }
-        console.log(sanitizedMessage.length);
 
         socket?.emit("send_message", {
             receiverId: contact.id,

@@ -20,7 +20,7 @@ const sendMessage = (socket, io, receiverId, message) => __awaiter(void 0, void 
     }
     catch (error) {
         console.log(error);
-        socket.emit("error", { message: "Error" });
+        socket.emit("error", { message: "Cannot send message." });
     }
 });
 exports.sendMessage = sendMessage;
@@ -31,7 +31,7 @@ const fetchMessages = (socket, friendId, offset) => __awaiter(void 0, void 0, vo
         socket.emit("fetch_messages", messages.reverse());
     }
     catch (error) {
-        socket.emit("error", { error: "Error" });
+        socket.emit("error", { message: "Cannot fetch messages." });
     }
 });
 exports.fetchMessages = fetchMessages;

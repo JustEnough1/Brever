@@ -20,7 +20,7 @@ export const sendMessage = async (
         );
     } catch (error) {
         console.log(error);
-        socket.emit("error", { message: "Error" });
+        socket.emit("error", { message: "Cannot send message." });
     }
 };
 
@@ -35,6 +35,6 @@ export const fetchMessages = async (
         const messages = await Message.find(session.userId, friendId, offset);
         socket.emit("fetch_messages", messages.reverse());
     } catch (error) {
-        socket.emit("error", { error: "Error" });
+        socket.emit("error", { message: "Cannot fetch messages." });
     }
 };
