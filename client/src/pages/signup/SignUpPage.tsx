@@ -50,23 +50,30 @@ export default function SignUpPage() {
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const response = await fetch("http://localhost:3001/auth/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                firstname,
-                lastname,
-                username,
-                password,
-            }),
-        });
+        const response = await fetch(
+            `${process.env.REACT_APP_API_URL}/auth/signup`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    firstname,
+                    lastname,
+                    username,
+                    password,
+                }),
+            }
+        );
 
         if (response.ok) {
             const data = await response.json();
             setUser(data);
-            setSocket(io("ws://localhost:3001/", { withCredentials: true }));
+            setSocket(
+                io(`ws://${process.env.REACT_APP_API_URL}`, {
+                    withCredentials: true,
+                })
+            );
             navigate("/login");
         } else {
             console.error("Registration failed.");

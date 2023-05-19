@@ -57,11 +57,14 @@ export default function SettingsPage({}: Props) {
 
             if (password) formData.append("password", password);
 
-            const response = await fetch("http://localhost:3001/users", {
-                method: "PUT",
-                body: formData,
-                credentials: "include",
-            });
+            const response = await fetch(
+                `${process.env.REACT_APP_API_URL}/users`,
+                {
+                    method: "PUT",
+                    body: formData,
+                    credentials: "include",
+                }
+            );
 
             if (response.ok) {
                 const profile: IProfile = await response.json();
@@ -73,10 +76,13 @@ export default function SettingsPage({}: Props) {
     };
 
     const handleLogout = async () => {
-        const response = await fetch("http://localhost:3001/auth/logout", {
-            credentials: "include",
-            method: "POST",
-        });
+        const response = await fetch(
+            `${process.env.REACT_APP_API_URL}/auth/logout`,
+            {
+                credentials: "include",
+                method: "POST",
+            }
+        );
 
         navigate("/login");
     };
@@ -85,10 +91,13 @@ export default function SettingsPage({}: Props) {
         const result = window.confirm("Are you sure you want to proceed?");
 
         if (result) {
-            const response = await fetch("http://localhost:3001/users/", {
-                credentials: "include",
-                method: "DELETE",
-            });
+            const response = await fetch(
+                `${process.env.REACT_APP_API_URL}/users/`,
+                {
+                    credentials: "include",
+                    method: "DELETE",
+                }
+            );
 
             setUser(null);
             navigate("/login");

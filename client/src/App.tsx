@@ -21,7 +21,7 @@ function App() {
 
             if (!user) {
                 const res = await fetch(
-                    "http://localhost:3001/auth/check-session",
+                    `${process.env.REACT_APP_API_URL}/auth/check-session`,
                     {
                         credentials: "include",
                         method: "POST",
@@ -33,7 +33,9 @@ function App() {
 
                     setUser(user);
                     setSocket(
-                        io("ws://localhost:3001/", { withCredentials: true })
+                        io(`ws://${process.env.REACT_APP_API_URL}`, {
+                            withCredentials: true,
+                        })
                     );
                 }
             }

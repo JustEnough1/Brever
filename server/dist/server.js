@@ -41,6 +41,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const multer_1 = __importDefault(require("multer"));
+const path_1 = __importDefault(require("path"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const auth_1 = __importStar(require("./routes/auth"));
@@ -54,7 +55,7 @@ const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         credentials: true,
     },
 });
@@ -64,10 +65,10 @@ const sessionMiddleware = (0, express_session_1.default)({
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 },
 });
-app.use(express_1.default.static("public"));
+app.use(express_1.default.static(path_1.default.join(__dirname, "..", "public")));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true,
 }));
 app.use(sessionMiddleware);
@@ -87,6 +88,15 @@ const storage = multer_1.default.diskStorage({
     }),
 });
 exports.upload = (0, multer_1.default)({ storage }).single("avatar");
+app.get("*", (req, res) => {
+    try {
+        res.sendFile(path_1.default.join(__dirname, "..", "public", "index.html"));
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error" });
+    }
+});
 httpServer.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}.\nSee application here - http://localhost:${PORT}/`);
 });

@@ -33,7 +33,7 @@ export default function RequestsPage({}: Props) {
 
     const searchUsers = async (value: string) => {
         const response = await fetch(
-            `http://localhost:3001/users/?searchValue=${value}`,
+            `${process.env.REACT_APP_API_URL}/users/?searchValue=${value}`,
             {
                 credentials: "include",
             }

@@ -3,6 +3,7 @@ import session from "express-session";
 import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
+import path from "path";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import setupAuthSocketListeners, { authRouter } from "./routes/auth";
@@ -31,7 +32,7 @@ const io = new Server<
     SocketData
 >(httpServer, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         credentials: true,
     },
 });
@@ -43,12 +44,12 @@ const sessionMiddleware = session({
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 },
 });
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.use(express.json());
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: "*",
         credentials: true,
     })
 );
@@ -81,6 +82,17 @@ const storage = multer.diskStorage({
 
 export const upload = multer({ storage }).single("avatar");
 
+app.get("*", (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error" });
+    }
+});
+
 httpServer.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(
+        `Server is running on port ${PORT}.\nSee application here - http://localhost:${PORT}/`
+    );
 });
