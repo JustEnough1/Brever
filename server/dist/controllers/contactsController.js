@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.declineFriendRequest = exports.acceptFriendRequest = exports.sendFriendRequest = exports.getRequests = exports.getContacts = void 0;
 const Contact_1 = require("../models/Contact");
 const contactStatus_1 = require("../ts/enums/contactStatus");
+// Контроллер, отвечающий за получение контактов и создания rooms
 const getContacts = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
@@ -28,6 +29,7 @@ const getContacts = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getContacts = getContacts;
+// Контроллер, отвечающий за получение запросов на добавление в контакты
 const getRequests = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
@@ -40,6 +42,7 @@ const getRequests = (socket) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getRequests = getRequests;
+// Контроллер, отвечающий за отправку запроса на добавление в контакты
 const sendFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
@@ -54,6 +57,7 @@ const sendFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.sendFriendRequest = sendFriendRequest;
+// Контроллер, отвечающий за принятия запроса на добавление в контакты
 const acceptFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
@@ -65,6 +69,7 @@ const acceptFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void
     }
 });
 exports.acceptFriendRequest = acceptFriendRequest;
+// Контроллер, отвечающий за отказ от добавления в контакты
 const declineFriendRequest = (socket, friendId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;

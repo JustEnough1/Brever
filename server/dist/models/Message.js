@@ -12,7 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
 const DatabaseManager_1 = require("../database/DatabaseManager");
 const Contact_1 = require("./Contact");
+// Класс, отвечающий за работу, связанной с сообщениями
 class Message {
+    // Метод сохранения в базу данных
     static save(senderId, receiverId, message) {
         return __awaiter(this, void 0, void 0, function* () {
             const areContacts = yield Contact_1.ContactsModel.areContacts(senderId, receiverId);
@@ -22,6 +24,7 @@ class Message {
             return yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT * FROM messages WHERE id = ${result.insertId}`);
         });
     }
+    // Метод получения сообщений
     static find(userId, friendId, offset) {
         return __awaiter(this, void 0, void 0, function* () {
             const messages = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT sender_id, receiver_id, message, created_at FROM messages

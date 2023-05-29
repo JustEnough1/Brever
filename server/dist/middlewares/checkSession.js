@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkSocketSessionMiddleware = exports.checkSessionMiddleware = void 0;
+// Промежуточный обработчик, обеспечивающий наличие сессии
 function checkSessionMiddleware(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -25,6 +26,7 @@ function checkSessionMiddleware(req, res, next) {
     });
 }
 exports.checkSessionMiddleware = checkSessionMiddleware;
+// Промежуточный обработчик, обеспечивающий наличие сессии в сокете
 function checkSocketSessionMiddleware(socket, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

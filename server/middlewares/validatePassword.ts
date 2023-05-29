@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
+// Промежуточный обработчик, валидирующий пароль
 export function validatePasswordMiddleware(
     req: Request,
     res: Response,

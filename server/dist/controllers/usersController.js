@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.searchUser = exports.updateUser = void 0;
 const User_1 = require("../models/User");
 const server_1 = require("../server");
+// Контроллер, отвечающий за обновление пользовательской информации
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = req.session;
@@ -39,6 +40,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateUser = updateUser;
+// Контроллер, отвечающий за поиск людей
 const searchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { searchValue } = req.query;
@@ -54,6 +56,7 @@ const searchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.searchUser = searchUser;
+// Контроллер, отвечающий за удаление аккаунта
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield User_1.UserModel.delete(req.session.userId);

@@ -1,7 +1,9 @@
 import { DatabaseManager } from "../database/DatabaseManager";
 import { ContactStatus } from "../ts/enums/contactStatus";
 
+// Класс, отвечающий за работу, связанной с контактами
 export class ContactsModel {
+    // Метод сохранения в базу данных
     static async save(userId: number, friendId: number, status: ContactStatus) {
         try {
             let query = "";
@@ -27,6 +29,7 @@ export class ContactsModel {
         }
     }
 
+    // Метод получения всех контактов пользователя
     static async findAll(userId: number): Promise<IProfile[]> {
         return await DatabaseManager.executeQuery(
             `
@@ -38,6 +41,7 @@ export class ContactsModel {
         );
     }
 
+    // Метод получения всех запросов на добавления в контакты
     static async findAllRequests(userId: number): Promise<IProfile[]> {
         return await DatabaseManager.executeQuery(
             `
@@ -49,6 +53,7 @@ export class ContactsModel {
         );
     }
 
+    // Метод проверки, являются ли два пользователя контактами
     static async areContacts(userId: number, friendId: number) {
         const result = await DatabaseManager.executeQuery(
             `

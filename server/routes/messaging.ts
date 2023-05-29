@@ -2,8 +2,10 @@ import { Server } from "socket.io";
 import { checkSocketSessionMiddleware } from "../middlewares/checkSession";
 import { fetchMessages, sendMessage } from "../controllers/messagingController";
 
+// Функция, регистрирующая слушателей событий
 export default function setupMessagingSocketListeners(io: Server) {
     io.on("connection", (socket) => {
+        // Отправка сообщений
         socket.on("send_message", async ({ receiverId, message }) => {
             try {
                 await checkSocketSessionMiddleware(socket, () => {
@@ -14,6 +16,7 @@ export default function setupMessagingSocketListeners(io: Server) {
             }
         });
 
+        // Получение сообщений
         socket.on("fetch_messages", async ({ friendId, offset }) => {
             try {
                 await checkSocketSessionMiddleware(socket, () => {

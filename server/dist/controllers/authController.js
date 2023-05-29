@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkSession = exports.logout = exports.login = exports.signup = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const User_1 = require("../models/User");
+// Контроллер, отвечающий за регистрацию
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = req.session;
@@ -40,6 +41,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.signup = signup;
+// Контроллер, отвечающий за вход в аккаунт
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = req.session;
@@ -69,6 +71,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.login = login;
+// Контроллер, отвечающий за выход из аккаунта
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = req.session;
@@ -83,6 +86,7 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.logout = logout;
+// Контроллер, отвечающий за проверку наличия сессии пользователя
 const checkSession = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = req.session;

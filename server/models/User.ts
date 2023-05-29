@@ -1,12 +1,16 @@
 import bcrypt from "bcryptjs";
 import { DatabaseManager } from "../database/DatabaseManager";
 
+// Класс, отвечающий за работу, связанной с пользователем
 export class UserModel {
+    // Метод удаления пользователя
     static async delete(userId: number) {
         return await DatabaseManager.executeQuery(
             `DELETE FROM users WHERE id = ${userId}`
         );
     }
+
+    // Метод хеширования пароля
     static hashPassword(password: string) {
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
@@ -14,6 +18,7 @@ export class UserModel {
         return { hashedPassword, salt };
     }
 
+    // Метод сохранения в базу данных
     static async save(
         username: string,
         password: string,
@@ -26,6 +31,7 @@ export class UserModel {
         );
     }
 
+    // Метод получения пользователя по его имени пользователя
     static async findByUsername(username: string) {
         const user = await DatabaseManager.executeQuery(
             `SELECT * FROM users WHERE username = "${username}"`
@@ -34,6 +40,7 @@ export class UserModel {
         return user[0];
     }
 
+    // Метод получения пользователя по его уникальному идентификатору
     static async findById(id: number) {
         const user: IUser[] = await DatabaseManager.executeQuery(
             `SELECT * FROM users WHERE id = ${id}`
@@ -42,6 +49,7 @@ export class UserModel {
         return user[0];
     }
 
+    // Метод получения пользователей по их примерному имени пользователя
     static async findBySearchValue(searchValue: string, userId: number) {
         let users = await DatabaseManager.executeQuery(
             `SELECT *
@@ -63,6 +71,7 @@ export class UserModel {
         return users;
     }
 
+    // Метод, приводящий IUser в IProfile
     static getProfileFromUser(user: IUser): IProfile {
         return {
             id: user.id,
@@ -73,6 +82,7 @@ export class UserModel {
         };
     }
 
+    // Метод обновления пользователя
     static async update(
         userId: number,
         user: {

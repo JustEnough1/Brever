@@ -1,7 +1,9 @@
 import { DatabaseManager } from "../database/DatabaseManager";
 import { ContactsModel } from "./Contact";
 
+// Класс, отвечающий за работу, связанной с сообщениями
 export class Message {
+    // Метод сохранения в базу данных
     static async save(senderId: number, receiverId: number, message: string) {
         const areContacts = await ContactsModel.areContacts(
             senderId,
@@ -20,6 +22,7 @@ export class Message {
         );
     }
 
+    // Метод получения сообщений
     static async find(userId: number, friendId: number, offset: number) {
         const messages: IMessage[] = await DatabaseManager.executeQuery(
             `SELECT sender_id, receiver_id, message, created_at FROM messages

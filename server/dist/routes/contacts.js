@@ -11,9 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const contactsController_1 = require("../controllers/contactsController");
 const checkSession_1 = require("../middlewares/checkSession");
+// Функция, регистрирующая слушателей событий
 function setupContactsSocketListeners(io) {
     io.on("connection", (socket) => {
         try {
+            // Получение контактов
             socket.on("get_contacts", () => __awaiter(this, void 0, void 0, function* () {
                 try {
                     yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
@@ -24,6 +26,7 @@ function setupContactsSocketListeners(io) {
                     socket.emit("error", { error: "Error" });
                 }
             }));
+            // Получение запросов
             socket.on("get_requests", () => __awaiter(this, void 0, void 0, function* () {
                 try {
                     yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
@@ -34,6 +37,7 @@ function setupContactsSocketListeners(io) {
                     socket.emit("error", { error: "Error" });
                 }
             }));
+            // Отправка запроса на добавление в контакты
             socket.on("send_friend_request", (payload) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
@@ -45,6 +49,7 @@ function setupContactsSocketListeners(io) {
                     socket.emit("error", { message: "Error" });
                 }
             }));
+            // Принятие запроса на добавление в контакты
             socket.on("accept_friend_request", (payload) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {
@@ -59,6 +64,7 @@ function setupContactsSocketListeners(io) {
                     socket.emit("error", { message: error });
                 }
             }));
+            // Отказ от запроса на добавление в контакты
             socket.on("decline_friend_request", (payload) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     yield (0, checkSession_1.checkSocketSessionMiddleware)(socket, () => {

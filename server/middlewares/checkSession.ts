@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { IUserSession } from "../ts/interfaces/IUserSession";
 import { Socket } from "socket.io";
 
+// Промежуточный обработчик, обеспечивающий наличие сессии
 export async function checkSessionMiddleware(
     req: Request,
     res: Response,
@@ -20,6 +21,7 @@ export async function checkSessionMiddleware(
     }
 }
 
+// Промежуточный обработчик, обеспечивающий наличие сессии в сокете
 export async function checkSocketSessionMiddleware(
     socket: Socket,
     next: NextFunction

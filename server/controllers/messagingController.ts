@@ -2,6 +2,7 @@ import { IUserSession } from "../ts/interfaces/IUserSession";
 import { Server, Socket } from "socket.io";
 import { Message } from "../models/Message";
 
+// Контроллер, отвечающий за отправку сообщения
 export const sendMessage = async (
     socket: Socket,
     io: Server,
@@ -24,6 +25,7 @@ export const sendMessage = async (
     }
 };
 
+// Контроллер, отвечающий за получение сообщений
 export const fetchMessages = async (
     socket: Socket,
     friendId: number,

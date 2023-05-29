@@ -13,6 +13,7 @@ import { Server } from "socket.io";
 
 export const authRouter = Router();
 
+// Путь регистрации
 authRouter.post(
     "/signup",
     validateUsernameMiddleware,
@@ -21,6 +22,7 @@ authRouter.post(
     signup
 );
 
+// Путь входа в аккаунта
 authRouter.post(
     "/login",
     validateUsernameMiddleware,
@@ -28,8 +30,11 @@ authRouter.post(
     login
 );
 
+// Путь выхода из аккаунта
 authRouter.post("/logout", checkSessionMiddleware, logout);
 
+// Путь проверки сессии
 authRouter.post("/check-session", checkSessionMiddleware, checkSession);
 
+// Функция, регистрирующая слушателей событий
 export default function setupAuthSocketListeners(io: Server) {}

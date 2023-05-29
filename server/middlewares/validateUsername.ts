@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
+// Промежуточный обработчик, валидирующий имя пользователя
 export function validateUsernameMiddleware(
     req: Request,
     res: Response,

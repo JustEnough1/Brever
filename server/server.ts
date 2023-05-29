@@ -37,6 +37,7 @@ const io = new Server<
     },
 });
 
+// Конфигурация и приминение middleware
 const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET!,
     resave: false,
@@ -45,7 +46,6 @@ const sessionMiddleware = session({
 });
 
 app.use(express.static(path.join(__dirname, "..", "public")));
-
 app.use(express.json());
 app.use(
     cors({
@@ -53,7 +53,6 @@ app.use(
         credentials: true,
     })
 );
-
 app.use(sessionMiddleware);
 io.use((socket, next) => {
     sessionMiddleware(
@@ -62,14 +61,15 @@ io.use((socket, next) => {
         next as NextFunction
     );
 });
-
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 
+// Регистрация слушателей событий
 setupContactsSocketListeners(io);
 setupAuthSocketListeners(io);
 setupMessagingSocketListeners(io);
 
+// Конфигурация, определяющая место назначения загружаемых файлов
 const storage = multer.diskStorage({
     destination: "./public/images/avatars/",
     filename: async (req, file, cb) => {

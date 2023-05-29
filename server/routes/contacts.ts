@@ -8,9 +8,11 @@ import {
 } from "../controllers/contactsController";
 import { checkSocketSessionMiddleware } from "../middlewares/checkSession";
 
+// Функция, регистрирующая слушателей событий
 export default function setupContactsSocketListeners(io: Server) {
     io.on("connection", (socket) => {
         try {
+            // Получение контактов
             socket.on("get_contacts", async () => {
                 try {
                     await checkSocketSessionMiddleware(socket, () => {
@@ -21,6 +23,7 @@ export default function setupContactsSocketListeners(io: Server) {
                 }
             });
 
+            // Получение запросов
             socket.on("get_requests", async () => {
                 try {
                     await checkSocketSessionMiddleware(socket, () => {
@@ -31,6 +34,7 @@ export default function setupContactsSocketListeners(io: Server) {
                 }
             });
 
+            // Отправка запроса на добавление в контакты
             socket.on("send_friend_request", async (payload) => {
                 try {
                     await checkSocketSessionMiddleware(socket, () => {
@@ -42,6 +46,7 @@ export default function setupContactsSocketListeners(io: Server) {
                 }
             });
 
+            // Принятие запроса на добавление в контакты
             socket.on("accept_friend_request", async (payload) => {
                 try {
                     await checkSocketSessionMiddleware(socket, () => {
@@ -55,6 +60,8 @@ export default function setupContactsSocketListeners(io: Server) {
                     socket.emit("error", { message: error });
                 }
             });
+
+            // Отказ от запроса на добавление в контакты
             socket.on("decline_friend_request", async (payload) => {
                 try {
                     await checkSocketSessionMiddleware(socket, () => {

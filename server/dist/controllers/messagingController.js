@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchMessages = exports.sendMessage = void 0;
 const Message_1 = require("../models/Message");
+// Контроллер, отвечающий за отправку сообщения
 const sendMessage = (socket, io, receiverId, message) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;
@@ -24,6 +25,7 @@ const sendMessage = (socket, io, receiverId, message) => __awaiter(void 0, void 
     }
 });
 exports.sendMessage = sendMessage;
+// Контроллер, отвечающий за получение сообщений
 const fetchMessages = (socket, friendId, offset) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const session = socket.request.session;

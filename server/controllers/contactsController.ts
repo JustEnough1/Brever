@@ -3,6 +3,7 @@ import { ContactsModel } from "../models/Contact";
 import { Socket } from "socket.io";
 import { ContactStatus } from "../ts/enums/contactStatus";
 
+// Контроллер, отвечающий за получение контактов и создания rooms
 export const getContacts = async (socket: Socket) => {
     try {
         const session = socket.request.session as IUserSession;
@@ -21,6 +22,7 @@ export const getContacts = async (socket: Socket) => {
     }
 };
 
+// Контроллер, отвечающий за получение запросов на добавление в контакты
 export const getRequests = async (socket: Socket) => {
     try {
         const session = socket.request.session as IUserSession;
@@ -34,6 +36,7 @@ export const getRequests = async (socket: Socket) => {
     }
 };
 
+// Контроллер, отвечающий за отправку запроса на добавление в контакты
 export const sendFriendRequest = async (socket: Socket, friendId: number) => {
     try {
         const session = socket.request.session as IUserSession;
@@ -56,6 +59,7 @@ export const sendFriendRequest = async (socket: Socket, friendId: number) => {
     }
 };
 
+// Контроллер, отвечающий за принятия запроса на добавление в контакты
 export const acceptFriendRequest = async (socket: Socket, friendId: number) => {
     try {
         const session = socket.request.session as IUserSession;
@@ -71,6 +75,7 @@ export const acceptFriendRequest = async (socket: Socket, friendId: number) => {
     }
 };
 
+// Контроллер, отвечающий за отказ от добавления в контакты
 export const declineFriendRequest = async (
     socket: Socket,
     friendId: number

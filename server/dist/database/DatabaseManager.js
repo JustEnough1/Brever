@@ -17,33 +17,50 @@ exports.DatabaseManager = void 0;
 const mysql_1 = __importDefault(require("mysql"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+// Класс, отвечающий за подключение к базе данных и
+// выполнение запросов к базе данных
 class DatabaseManager {
 }
 _a = DatabaseManager;
 DatabaseManager.getConnection = () => __awaiter(void 0, void 0, void 0, function* () {
-    if (!_a.conn) {
-        _a.conn = yield mysql_1.default.createConnection({
-            host: process.env.DB_HOST,
-            port: Number(process.env.DB_PORT),
-            user: process.env.DB_USER,
-            database: process.env.DATABASE,
-            password: process.env.DB_PASSWORD,
-        });
-        _a.conn.connect(function (err) {
-            if (err)
-                throw err;
-            return DatabaseManager.conn;
-        });
+    try {
+        if (!_a.conn) {
+            _a.conn = yield mysql_1.default.createConnection({
+                host: process.env.DB_HOST,
+                port: Number(process.env.DB_PORT),
+                user: process.env.DB_USER,
+                database: process.env.DATABASE,
+                password: process.env.DB_PASSWORD,
+            });
+            yield new Promise((resolve, reject) => {
+                var _b;
+                (_b = _a.conn) === null || _b === void 0 ? void 0 : _b.connect(function (err) {
+                    if (err)
+                        reject(err);
+                    resolve();
+                });
+            });
+        }
+        return _a.conn;
     }
-    return _a.conn;
+    catch (error) {
+        console.log("Error connecting to the database:", error);
+        return null;
+    }
 });
 DatabaseManager.executeQuery = (query) => {
     return new Promise((resolve, reject) => {
-        _a.getConnection().then((db) => db === null || db === void 0 ? void 0 : db.query(query, (err, res) => {
+        _a.getConnection()
+            .then((db) => db === null || db === void 0 ? void 0 : db.query(query, (err, res) => {
             if (err)
                 reject(err);
             resolve(res);
-        }));
+        }))
+            .catch((error) => console.log(error));
     });
 };
 exports.DatabaseManager = DatabaseManager;
+// Отлавливатель ошибок
+DatabaseManager.getConnection().then((conn) => conn === null || conn === void 0 ? void 0 : conn.on("error", (err) => {
+    console.log("Database error occured: ", err);
+}));

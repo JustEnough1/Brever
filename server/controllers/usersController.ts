@@ -3,6 +3,7 @@ import { IUserSession } from "../ts/interfaces/IUserSession";
 import { UserModel } from "../models/User";
 import { upload } from "../server";
 
+// Контроллер, отвечающий за обновление пользовательской информации
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const session = req.session as IUserSession;
@@ -36,6 +37,7 @@ export const updateUser = async (req: Request, res: Response) => {
     }
 };
 
+// Контроллер, отвечающий за поиск людей
 export const searchUser = async (req: Request, res: Response) => {
     try {
         const { searchValue } = req.query;
@@ -56,6 +58,7 @@ export const searchUser = async (req: Request, res: Response) => {
     }
 };
 
+// Контроллер, отвечающий за удаление аккаунта
 export const deleteUser = async (req: Request, res: Response) => {
     try {
         const result = await UserModel.delete(req.session.userId);

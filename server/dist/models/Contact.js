@@ -12,7 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContactsModel = void 0;
 const DatabaseManager_1 = require("../database/DatabaseManager");
 const contactStatus_1 = require("../ts/enums/contactStatus");
+// Класс, отвечающий за работу, связанной с контактами
 class ContactsModel {
+    // Метод сохранения в базу данных
     static save(userId, friendId, status) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -37,6 +39,7 @@ class ContactsModel {
             }
         });
     }
+    // Метод получения всех контактов пользователя
     static findAll(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield DatabaseManager_1.DatabaseManager.executeQuery(`
@@ -47,6 +50,7 @@ class ContactsModel {
             `);
         });
     }
+    // Метод получения всех запросов на добавления в контакты
     static findAllRequests(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield DatabaseManager_1.DatabaseManager.executeQuery(`
@@ -57,6 +61,7 @@ class ContactsModel {
             `);
         });
     }
+    // Метод проверки, являются ли два пользователя контактами
     static areContacts(userId, friendId) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield DatabaseManager_1.DatabaseManager.executeQuery(`

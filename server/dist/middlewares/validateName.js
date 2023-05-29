@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateNameMiddleware = void 0;
+// Промежуточный обработчик, валидирующий имя и фамилию
 function validateNameMiddleware(req, res, next) {
     const { firstname, lastname } = req.body;
     if (!(firstname.length > 0 && firstname.length < 255))

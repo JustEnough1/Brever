@@ -3,6 +3,7 @@ import { IUserSession } from "../ts/interfaces/IUserSession";
 import bcrypt from "bcryptjs";
 import { UserModel } from "../models/User";
 
+// Контроллер, отвечающий за регистрацию
 export const signup = async (req: Request, res: Response) => {
     try {
         const session = req.session as IUserSession;
@@ -42,6 +43,7 @@ export const signup = async (req: Request, res: Response) => {
     }
 };
 
+// Контроллер, отвечающий за вход в аккаунт
 export const login = async (req: Request, res: Response) => {
     try {
         const session = req.session as IUserSession;
@@ -80,6 +82,7 @@ export const login = async (req: Request, res: Response) => {
     }
 };
 
+// Контроллер, отвечающий за выход из аккаунта
 export const logout = async (req: Request, res: Response) => {
     try {
         const session = req.session as IUserSession;
@@ -93,6 +96,7 @@ export const logout = async (req: Request, res: Response) => {
     }
 };
 
+// Контроллер, отвечающий за проверку наличия сессии пользователя
 export const checkSession = async (req: Request, res: Response) => {
     try {
         const session = req.session as IUserSession;

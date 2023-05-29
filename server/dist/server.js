@@ -59,6 +59,7 @@ const io = new socket_io_1.Server(httpServer, {
         credentials: true,
     },
 });
+// Конфигурация и приминение middleware
 const sessionMiddleware = (0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -77,9 +78,11 @@ io.use((socket, next) => {
 });
 app.use("/auth", auth_1.authRouter);
 app.use("/users", users_1.usersRouter);
+// Регистрация слушателей событий
 (0, contacts_1.default)(io);
 (0, auth_1.default)(io);
 (0, messaging_1.default)(io);
+// Конфигурация, определяющая место назначения загружаемых файлов
 const storage = multer_1.default.diskStorage({
     destination: "./public/images/avatars/",
     filename: (req, file, cb) => __awaiter(void 0, void 0, void 0, function* () {

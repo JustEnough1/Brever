@@ -15,34 +15,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const DatabaseManager_1 = require("../database/DatabaseManager");
+// Класс, отвечающий за работу, связанной с пользователем
 class UserModel {
+    // Метод удаления пользователя
     static delete(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield DatabaseManager_1.DatabaseManager.executeQuery(`DELETE FROM users WHERE id = ${userId}`);
         });
     }
+    // Метод хеширования пароля
     static hashPassword(password) {
         const salt = bcryptjs_1.default.genSaltSync(10);
         const hashedPassword = bcryptjs_1.default.hashSync(password, salt);
         return { hashedPassword, salt };
     }
+    // Метод сохранения в базу данных
     static save(username, password, salt, firstname, lastname) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield DatabaseManager_1.DatabaseManager.executeQuery(`INSERT INTO users VALUES (DEFAULT, "${username}", "${password}", "${salt}", "${firstname}", "${lastname}", DEFAULT, DEFAULT, DEFAULT)`);
         });
     }
+    // Метод получения пользователя по его имени пользователя
     static findByUsername(username) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT * FROM users WHERE username = "${username}"`);
             return user[0];
         });
     }
+    // Метод получения пользователя по его уникальному идентификатору
     static findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT * FROM users WHERE id = ${id}`);
             return user[0];
         });
     }
+    // Метод получения пользователей по их примерному имени пользователя
     static findBySearchValue(searchValue, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             let users = yield DatabaseManager_1.DatabaseManager.executeQuery(`SELECT *
@@ -61,6 +68,7 @@ class UserModel {
             return users;
         });
     }
+    // Метод, приводящий IUser в IProfile
     static getProfileFromUser(user) {
         return {
             id: user.id,
@@ -70,6 +78,7 @@ class UserModel {
             avatar: user.avatar,
         };
     }
+    // Метод обновления пользователя
     static update(userId, user) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `UPDATE users SET `;
