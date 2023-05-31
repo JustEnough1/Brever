@@ -16,6 +16,7 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        // Проверка наличия сессии у пользователя
         const checkSession = async () => {
             setIsLoading(true);
 

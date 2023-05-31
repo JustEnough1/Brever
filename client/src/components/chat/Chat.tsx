@@ -25,6 +25,7 @@ export default function Chat({ contact, setChatWith }: Props) {
     const [prevScrollHeight, setPrevScrollHeight] = useState(0);
     const messagesRef = useRef<HTMLDivElement>(null);
 
+    // Функция валидации и отправки сообщения
     const sendMessage = (message: string) => {
         const trimmedMessage = message.trim();
 
@@ -47,6 +48,7 @@ export default function Chat({ contact, setChatWith }: Props) {
         setNewMessage(event.target.value);
     };
 
+    // Получение сообщений
     const fetchMessages = () => {
         setIsLoading(true);
         socket?.emit("fetch_messages", {
@@ -59,6 +61,7 @@ export default function Chat({ contact, setChatWith }: Props) {
         setPrevScrollHeight(messagesRef.current?.scrollHeight || 0);
     };
 
+    // Сохранение позиции прокрутки после загрузки более старых сообщений
     useEffect(() => {
         if (messagesRef.current) {
             if (prevScrollHeight !== messagesRef.current.scrollHeight) {
@@ -69,10 +72,12 @@ export default function Chat({ contact, setChatWith }: Props) {
         }
     }, [messages]);
 
+    // Прокрутка чата в самый низ при его открытии
     useEffect(() => {
         messagesRef.current?.scrollTo(0, messagesRef.current.scrollHeight);
     }, []);
 
+    // Получение сообщений
     useEffect(() => {
         if (contact) {
             fetchMessages();

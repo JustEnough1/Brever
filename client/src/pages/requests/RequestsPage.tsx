@@ -17,10 +17,13 @@ export default function RequestsPage({}: Props) {
     let [searchResults, setSearchResults] = useState<IProfile[]>([]);
     const [searchTimeoutId, setSearchTimeoutId] = useState<NodeJS.Timeout>();
 
+    // Функция, принимающая запрос на добавление в контакты
     const acceptRequest = (friendId: number) => {
         socket?.emit("accept_friend_request", { friendId });
         socket?.emit("get_requests", {});
     };
+
+    // Функция, отклоняющая запрос на добавление в контакты
     const declineRequest = (friendId: number) => {
         socket?.emit("decline_friend_request", { friendId });
         socket?.emit("get_requests", {});
@@ -31,6 +34,7 @@ export default function RequestsPage({}: Props) {
         setSearchTimeoutId(setTimeout(() => searchUsers(value), 1000));
     };
 
+    // Функция глобального поиска людей по введенному в поиск значению
     const searchUsers = async (value: string) => {
         const response = await fetch(
             `${process.env.REACT_APP_API_URL}/users/?searchValue=${value}`,
@@ -42,6 +46,7 @@ export default function RequestsPage({}: Props) {
         setSearchResults(users.matchedUsers);
     };
 
+    // Функция, отправляющая запрос на добавление в контакты
     const handleSendFriendRequest = (friendId: number) => {
         socket?.emit("send_friend_request", { friendId });
         setSearchResults(
@@ -50,6 +55,7 @@ export default function RequestsPage({}: Props) {
     };
 
     useEffect(() => {
+        // Получение запросов на добавление в контакты
         socket?.emit("get_requests", {});
 
         socket?.on("get_requests", (requests: IProfile[]) => {

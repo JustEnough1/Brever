@@ -11,6 +11,7 @@ type ContextProps = {
     setIsLoading: (bool: boolean) => void;
 };
 
+// Главный контекст приложения
 export const AppContext = createContext<ContextProps>({
     user: null,
     setUser: () => {},

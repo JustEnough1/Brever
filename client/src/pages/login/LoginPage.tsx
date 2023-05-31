@@ -1,16 +1,10 @@
 import React, { ChangeEvent, FormEvent, useContext, useState } from "react";
-import {
-    Link,
-    redirect,
-    useNavigate,
-    useOutletContext,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import logo from "../../logo.svg";
 import bg from "./bg_curve.svg";
 import { AppContext } from "../../AppContext";
-import { IProfile } from "../../ts/interfaces/IProfile";
 import { io } from "socket.io-client";
 
 export default function LoginPage() {
@@ -28,6 +22,8 @@ export default function LoginPage() {
         setPassword(event.target.value);
     };
 
+    // Функция, которая срабатывает после нажатия кнопки Log in
+    // Отправляет введенные данные на сервер для входа в аккаунт
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         try {
             event.preventDefault();
@@ -47,6 +43,7 @@ export default function LoginPage() {
                 }
             );
 
+            // Если регистрация прошла успешно - происходит перенаправление на страницу контактов
             if (response.ok) {
                 const data = await response.json();
                 setUser(data.user);

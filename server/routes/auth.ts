@@ -22,7 +22,7 @@ authRouter.post(
     signup
 );
 
-// Путь входа в аккаунта
+// Путь входа в аккаунт
 authRouter.post(
     "/login",
     validateUsernameMiddleware,

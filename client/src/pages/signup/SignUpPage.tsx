@@ -17,6 +17,7 @@ export default function SignUpPage() {
 
     const navigate = useNavigate();
 
+    // Функция, валидирующая данные и переключающая следующий этап регистрации
     const handleNextStep = () => {
         if (firstname.length <= 0)
             return alert("Please, enter Your firstname.");
@@ -27,6 +28,7 @@ export default function SignUpPage() {
         setStep(2);
     };
 
+    // Функция, которая переключает предыдущий этап регистрации
     const handlePreviousStep = () => {
         setStep(1);
     };
@@ -47,6 +49,8 @@ export default function SignUpPage() {
         setPassword(event.target.value);
     };
 
+    // Функция, которая срабатывает после нажатия кнопки Sign up
+    // Отправляет введенные данные на сервер для создания аккаунта
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -66,6 +70,7 @@ export default function SignUpPage() {
             }
         );
 
+        // Если регистрация прошла успешно - происходит перенаправление на страницу входа
         if (response.ok) {
             const data = await response.json();
             setUser(data);

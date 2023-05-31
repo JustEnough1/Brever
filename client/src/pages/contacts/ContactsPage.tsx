@@ -16,6 +16,7 @@ export default function ContactsPage({}: Props) {
     let [contacts, setContacts] = useState<IProfile[]>([]);
     let [chatWith, setChatWith] = useState<IProfile | null>(null);
 
+    // Функция, которая фильтрует контакты по введенному в поиск значению
     const filterContacts = (event: ChangeEvent<HTMLInputElement>) => {
         const searchValue = event.target.value.toLowerCase();
         const sortedContacts = [...contacts].sort((a, b) => {
@@ -36,11 +37,13 @@ export default function ContactsPage({}: Props) {
         setContacts(sortedContacts);
     };
 
+    // Функция, открывающая чат с выбранным контактом
     const openChat = (contact: IProfile) => {
         setChatWith(contact);
     };
 
     useEffect(() => {
+        // Получение контактов с сервера
         setIsLoading(true);
         socket?.emit("get_contacts");
 

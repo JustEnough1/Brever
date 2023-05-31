@@ -41,6 +41,12 @@ export default function SettingsPage({}: Props) {
         setAvatar(file);
     };
 
+    const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    };
+
+    // Функция, которая срабатывает после нажатия кнопки Update info
+    // Отправляет новые данные пользователя на сервер для их обновления
     const handleSubmit = async () => {
         try {
             const formData = new FormData();
@@ -75,6 +81,7 @@ export default function SettingsPage({}: Props) {
         }
     };
 
+    // Функция выхода из аккаунта
     const handleLogout = async () => {
         const response = await fetch(
             `${process.env.REACT_APP_API_URL}/auth/logout`,
@@ -87,6 +94,7 @@ export default function SettingsPage({}: Props) {
         navigate("/login");
     };
 
+    // Функция удаления аккаунта
     const handleDeleteUser = async () => {
         const result = window.confirm("Are you sure you want to proceed?");
 
@@ -102,10 +110,6 @@ export default function SettingsPage({}: Props) {
             setUser(null);
             navigate("/login");
         }
-    };
-
-    const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
     };
 
     return (
